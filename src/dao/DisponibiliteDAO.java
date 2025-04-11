@@ -25,7 +25,7 @@ public class DisponibiliteDAO {
                 dispo.add(new Disponibilite(
                     rs.getInt("id"),
                     rs.getInt("specialiste_id"),
-                    rs.getTimestamp("horaire").toLocalDateTime(), // Pas de toString() ici
+                    rs.getTimestamp("horaire").toLocalDateTime(), 
                     rs.getBoolean("disponible")
                 ));
             }
