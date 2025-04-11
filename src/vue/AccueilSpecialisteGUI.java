@@ -27,7 +27,7 @@ public class AccueilSpecialisteGUI extends JFrame {
         add(panel);
     }
 
-    // Getters pour le contrôleur
+
     public JButton getVoirRdvsButton() {
         return voirRdvsButton;
     }

@@ -35,7 +35,7 @@ public class ConnexionGUI extends JFrame {
         add(panel);
     }
 
-    // Getters pour le contrôleur
+
     public JButton getConnexionButton() {
         return connexionButton;
     }

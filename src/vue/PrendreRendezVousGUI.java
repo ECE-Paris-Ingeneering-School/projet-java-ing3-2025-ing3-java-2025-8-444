@@ -39,7 +39,6 @@ public class PrendreRendezVousGUI extends JFrame {
         add(bottomPanel, BorderLayout.SOUTH);
     }
 
-    // Getters pour le contrôleur
     public JComboBox<String> getSpecialisteCombo() {
         return specialisteCombo;
     }

@@ -27,7 +27,7 @@ public class AccueilPatientGUI extends JFrame {
         add(panel);
     }
 
-    // Getters pour le contrôleur
+
     public JButton getMesRdvsButton() {
         return mesRdvsButton;
     }

@@ -30,7 +30,7 @@ public class AccueilAdminGUI extends JFrame {
         add(panel);
     }
 
-    // Getters pour le contrôleur
+
     public JButton getGererSpecialistesButton() {
         return gererSpecialistesButton;
     }

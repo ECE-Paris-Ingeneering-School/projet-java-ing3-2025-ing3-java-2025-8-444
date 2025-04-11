@@ -38,7 +38,7 @@ public class InscriptionPatientGUI extends JFrame {
         add(panel);
     }
 
-    // Getters pour le contrôleur
+
     public JTextField getNomField() {
         return nomField;
     }

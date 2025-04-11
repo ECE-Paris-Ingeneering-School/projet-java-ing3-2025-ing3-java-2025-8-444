@@ -22,7 +22,7 @@ public class MesRendezVousGUI extends JFrame {
         add(retourButton, BorderLayout.SOUTH);
     }
 
-    // Getters pour le contrôleur
+
     public JTextArea getRdvArea() {
         return rdvArea;
     }
