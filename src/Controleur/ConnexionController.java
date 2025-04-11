@@ -37,11 +37,11 @@ public class ConnexionController {
             JOptionPane.showMessageDialog(connexionGUI, "Identifiants incorrects !");
         }
     }
-
+    
     private void openInscription() {
         this.connexionGUI.dispose();
         InscriptionPatientGUI inscriptionGui = new InscriptionPatientGUI();
-        new InscriptionPatientController(inscriptionGui); // Associe le contrôleur à la vue
+        new InscriptionPatientController(inscriptionGui); 
         inscriptionGui.setVisible(true);
     }
     

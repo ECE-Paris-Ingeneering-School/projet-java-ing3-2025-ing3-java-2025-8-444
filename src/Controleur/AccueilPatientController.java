@@ -5,7 +5,6 @@ import vue.ConnexionGUI;
 import vue.MesRendezVousGUI;
 import vue.PrendreRendezVousGUI;
 
-//import javax.swing.*;
 
 public class AccueilPatientController {
     private AccueilPatientGUI gui;
