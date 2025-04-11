@@ -36,7 +36,6 @@ public class PrendreRendezVousController {
     }
 
     private void loadDisponibilites() {
-        // Pour cet exemple, on suppose que l'index du combobox + 1 correspond à l'ID du spécialiste
         int specialisteId = gui.getSpecialisteCombo().getSelectedIndex() + 1;
         List<Disponibilite> dispoList = dispoDAO.findDisponiblesBySpecialiste(specialisteId);
         DefaultListModel<String> model = new DefaultListModel<>();
