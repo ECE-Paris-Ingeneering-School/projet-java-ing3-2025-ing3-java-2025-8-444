@@ -28,7 +28,7 @@ public class MesRendezVousController {
     }
 
     private void loadRendezVous() {
-        // Ici, nous simulons l'ID patient = 1.
+
         List<RendezVous> rdvs = rdvDAO.findByPatient(1);
         StringBuilder sb = new StringBuilder();
         for (RendezVous rdv : rdvs) {
