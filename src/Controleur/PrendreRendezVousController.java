@@ -55,7 +55,7 @@ public class PrendreRendezVousController {
         int specialisteId = gui.getSpecialisteCombo().getSelectedIndex() + 1;
         List<Disponibilite> dispoList = dispoDAO.findDisponiblesBySpecialiste(specialisteId);
         Disponibilite selected = dispoList.get(index);
-        // Pour cet exemple, nous simulons l'ID du patient à 1.
+
         RendezVous rdv = new RendezVous(0, 1, specialisteId, selected.getId(), "Rendez-vous réservé via l'application");
         rdvDAO.save(rdv);
         dispoDAO.updateDisponibilite(selected.getId(), false);
