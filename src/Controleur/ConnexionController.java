@@ -1,48 +1,31 @@
-package controleur;
+package controller;
 
-import dao.ConnexionBDD;
-import dao.PatientDAO;
-import modele.Patient;
-import vue.ConnexionGUI;
-import vue.AccueilPatientGUI;
-import vue.InscriptionPatientGUI;
-
-import javax.swing.*;
-import java.sql.Connection;
+import dao.*;
+import model.*;
 
 public class ConnexionController {
-    private ConnexionGUI connexionGUI;
-
-    public ConnexionController(ConnexionGUI connexionGUI) {
-        this.connexionGUI = connexionGUI;
-        initController();
-    }
-
-    private void initController() {
-        connexionGUI.getConnexionButton().addActionListener(e -> authenticate());
-        connexionGUI.getInscriptionButton().addActionListener(e -> openInscription());
-    }
-
-    private void authenticate() {
-        String email = connexionGUI.getEmail();
-        String password = connexionGUI.getMotDePasse();
-        Connection conn = ConnexionBDD.getConnection();
-        PatientDAO patientDAO = new PatientDAO(conn);
-        Patient patient = patientDAO.findByEmailAndPassword(email, password);
-        if (patient != null) {
-            JOptionPane.showMessageDialog(connexionGUI, "Connexion réussie !");
-            new AccueilPatientGUI().setVisible(true);
-            connexionGUI.dispose();
-        } else {
-            JOptionPane.showMessageDialog(connexionGUI, "Identifiants incorrects !");
+    public Utilisateur seConnecter(String email, String motDePasse) {
+        // Test Patient
+        for (Patient p : DAOFactory.getPatientDAO().getAll()) {
+            if (p.getEmail().equalsIgnoreCase(email) && p.getMotDePasse().equals(motDePasse)) {
+                return p;
+            }
         }
-    }
 
-    private void openInscription() {
-        this.connexionGUI.dispose();
-        InscriptionPatientGUI inscriptionGui = new InscriptionPatientGUI();
-        new InscriptionPatientController(inscriptionGui); // Associe le contrôleur à la vue
-        inscriptionGui.setVisible(true);
+        // Test Admin
+        for (Admin a : DAOFactory.getAdminDAO().getAll()) {
+            if (a.getEmail().equalsIgnoreCase(email) && a.getMotDePasse().equals(motDePasse)) {
+                return a;
+            }
+        }
+
+        // Test Specialiste
+        for (Specialiste s : DAOFactory.getSpecialisteDAO().getAll()) {
+            if (s.getEmail().equalsIgnoreCase(email) && s.getMotDePasse().equals(motDePasse)) {
+                return s;
+            }
+        }
+
+        return null; // Aucun utilisateur trouvé
     }
-    
 }
