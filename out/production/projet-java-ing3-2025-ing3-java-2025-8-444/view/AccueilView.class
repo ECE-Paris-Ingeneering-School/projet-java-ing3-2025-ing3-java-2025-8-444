@@ -29,6 +29,10 @@ public class AcceuilView extends JFrame {
         this.setSize(1000, 700);
         this.setLocationRelativeTo((Component)null);
         this.setLayout(new BorderLayout());
+        add(createHeaderPanel(), BorderLayout.NORTH);
+        add(createMainPanel(), BorderLayout.CENTER);
+        add(createFooterPanel(), BorderLayout.SOUTH);
+        setVisible(true);
     }
 
     private JPanel createHeaderPanel() {
