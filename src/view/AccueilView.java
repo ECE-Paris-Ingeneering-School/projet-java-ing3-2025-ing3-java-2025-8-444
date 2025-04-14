@@ -11,6 +11,12 @@ public class AcceuilView extends JFrame {
         setSize(1000, 700);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
+        //on ajoute le tout en visible pour que ça s'affiche
+        add(createHeaderPanel(), BorderLayout.NORTH);
+        add(createMainPanel(), BorderLayout.CENTER);
+        add(createFooterPanel(), BorderLayout.SOUTH);
+
+        setVisible(true);
     }
 
     //header (toute la bande haute de la page)
