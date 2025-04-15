@@ -49,6 +49,26 @@ public class RendezVousDAO implements DAO<RendezVous> {
         } catch (SQLException e) { e.printStackTrace(); }
         return list;
     }
+    public List<RendezVous> getAllForPatient(int patientId) {
+        List<RendezVous> list = new ArrayList<>();
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM rendezvous WHERE patient_id = ?");
+            stmt.setInt(1, patientId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                list.add(new RendezVous(
+                        rs.getInt("id"),
+                        patientDAO.get(rs.getInt("patient_id")),
+                        specialisteDAO.get(rs.getInt("specialiste_id")),
+                        disponibiliteDAO.get(rs.getInt("disponibilite_id")),
+                        rs.getString("statut"),
+                        rs.getString("notes")
+                ));
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return list;
+    }
 
     @Override
     public boolean save(RendezVous rdv) {

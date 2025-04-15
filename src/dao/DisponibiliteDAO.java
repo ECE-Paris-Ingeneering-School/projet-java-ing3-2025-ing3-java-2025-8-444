@@ -58,6 +58,30 @@ public class DisponibiliteDAO implements DAO<Disponibilite> {
         } catch (SQLException e) { e.printStackTrace(); }
         return list;
     }
+    public List<Disponibilite> getAllForSpecialiste(int specialisteId) {
+        List<Disponibilite> list = new ArrayList<>();
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM disponibilite WHERE specialiste_id = ?");
+            stmt.setInt(1, specialisteId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Lieu lieu = lieuDAO.get(rs.getInt("lieu_id"));
+                Specialiste specialiste = specialisteDAO.get(rs.getInt("specialiste_id"));
+
+                list.add(new Disponibilite(
+                        rs.getInt("id"),
+                        specialiste,
+                        rs.getDate("date").toLocalDate(),
+                        rs.getTime("heure_debut").toLocalTime(),
+                        rs.getTime("heure_fin").toLocalTime(),
+                        lieu,
+                        rs.getBoolean("est_disponible")
+                ));
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return list;
+    }
 
     @Override
     public boolean save(Disponibilite d) {

@@ -1,28 +1,33 @@
 package view;
 
-import model.Patient;
+import dao.RendezVousDAO;
+import model.RendezVous;
 import model.Utilisateur;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class AccueilPatientView extends JFrame {
 
+    private Utilisateur user;
+
     public AccueilPatientView(Utilisateur user) {
+        this.user = user;
         setTitle("Espace Patient - Bienvenue " + user.getPrenom());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1000, 700);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        add(createHeader(user), BorderLayout.NORTH);
+        add(createHeader(), BorderLayout.NORTH);
         add(createMainPanel(), BorderLayout.CENTER);
         add(createFooter(), BorderLayout.SOUTH);
 
         setVisible(true);
     }
 
-    private JPanel createHeader(Utilisateur user) {
+    private JPanel createHeader() {
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(new Color(231, 141, 82));
         header.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -36,6 +41,13 @@ public class AccueilPatientView extends JFrame {
         welcome.setHorizontalAlignment(SwingConstants.CENTER);
         header.add(welcome, BorderLayout.CENTER);
 
+        JButton logoutButton = new JButton("Déconnexion");
+        logoutButton.addActionListener(e -> {
+            dispose();
+            new ConnexionView();
+        });
+        header.add(logoutButton, BorderLayout.EAST);
+
         return header;
     }
 
@@ -43,22 +55,28 @@ public class AccueilPatientView extends JFrame {
         JPanel main = new JPanel(new BorderLayout());
         main.setBackground(Color.WHITE);
 
-        JLabel title = new JLabel("Vos Rendez-vous passés :");
+        JLabel title = new JLabel("Vos rendez-vous :");
         title.setFont(new Font("SansSerif", Font.BOLD, 20));
         title.setHorizontalAlignment(SwingConstants.CENTER);
 
-        // Liste des rendez-vous passés (à remplir via DAO)
         DefaultListModel<String> model = new DefaultListModel<>();
-        model.addElement("Consultation - Cardiologie - 2025-04-14");
-        model.addElement("Consultation - Dermatologie - 2025-03-10");
+        RendezVousDAO rdvDAO = new RendezVousDAO();
+        List<RendezVous> liste = rdvDAO.getAllForPatient(user.getId());
+
+        if (liste.isEmpty()) {
+            model.addElement("Aucun rendez-vous trouvé.");
+        } else {
+            for (RendezVous r : liste) {
+                model.addElement(r.getDisponibilite().getDate() + " à " + r.getDisponibilite().getHeureDebut() +
+                        " - " + r.getSpecialiste().getNom() + " (" + r.getStatut() + ")");
+            }
+        }
+
         JList<String> rdvList = new JList<>(model);
         JScrollPane scrollPane = new JScrollPane(rdvList);
 
-        JButton searchNewRdv = new JButton("Chercher un nouveau rendez-vous");
-        searchNewRdv.addActionListener(e -> {
-            // ouvrir interface de recherche
-            JOptionPane.showMessageDialog(this, "Interface recherche à coder.");
-        });
+        JButton searchNewRdv = new JButton("Prendre un nouveau rendez-vous");
+        searchNewRdv.addActionListener(e -> JOptionPane.showMessageDialog(this, "TODO: ouvrir interface de recherche."));
 
         main.add(title, BorderLayout.NORTH);
         main.add(scrollPane, BorderLayout.CENTER);
