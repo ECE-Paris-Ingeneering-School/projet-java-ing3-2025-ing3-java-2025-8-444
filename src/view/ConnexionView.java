@@ -2,7 +2,6 @@ package view;
 
 import controller.ConnexionController;
 import model.*;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -23,7 +22,8 @@ public class ConnexionView extends JFrame {
     }
 
     private void initUI() {
-        JPanel panel = new JPanel(new GridLayout(3, 2, 5, 5));
+        JPanel panel = new JPanel(new GridLayout(4, 2, 5, 5));
+
         JLabel emailLabel = new JLabel("Email:");
         JLabel passwordLabel = new JLabel("Mot de passe:");
 
@@ -33,12 +33,20 @@ public class ConnexionView extends JFrame {
         JButton loginButton = new JButton("Se connecter");
         loginButton.addActionListener(this::handleLogin);
 
+        JButton registerButton = new JButton("S'inscrire");
+        registerButton.addActionListener(e -> {
+            dispose();  // ferme la fenêtre actuelle
+            new InscriptionView();  // ouvre la fenêtre d'inscription
+        });
+
         panel.add(emailLabel);
         panel.add(emailField);
         panel.add(passwordLabel);
         panel.add(passwordField);
-        panel.add(new JLabel());
+        panel.add(new JLabel());  // vide
         panel.add(loginButton);
+        panel.add(new JLabel());  // vide
+        panel.add(registerButton);
 
         add(panel);
     }
@@ -49,12 +57,16 @@ public class ConnexionView extends JFrame {
 
         Utilisateur user = controller.seConnecter(email, mdp);
         if (user != null) {
-            String role = user instanceof Admin ? "Admin"
-                    : user instanceof Patient ? "Patient"
-                    : "Spécialiste";
+            dispose();  // ferme la fenêtre Connexion
 
-            JOptionPane.showMessageDialog(this, "Bienvenue " + user.getNom() + " ! (" + role + ")");
-            // TODO : ouvrir la fenêtre correspondante au type d'utilisateur
+            if (user instanceof Admin) {
+                new AccueilAdminView(user);
+            } else if (user instanceof Specialiste) {
+                new AccueilSpecialisteView(user);
+            } else if (user instanceof Patient) {
+                new AccueilPatientView(user);
+            }
+
         } else {
             JOptionPane.showMessageDialog(this, "Identifiants incorrects", "Erreur", JOptionPane.ERROR_MESSAGE);
         }

@@ -26,6 +26,7 @@ public class PatientDAO implements DAO<Patient> {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+
         }
         return null;
     }
