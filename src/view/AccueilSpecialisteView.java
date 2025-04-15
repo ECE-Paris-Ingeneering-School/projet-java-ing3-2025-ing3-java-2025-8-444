@@ -1,28 +1,33 @@
 package view;
 
-import model.Specialiste;
+import dao.DisponibiliteDAO;
+import model.Disponibilite;
 import model.Utilisateur;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class AccueilSpecialisteView extends JFrame {
 
+    private Utilisateur user;
+
     public AccueilSpecialisteView(Utilisateur user) {
+        this.user = user;
         setTitle("Espace Spécialiste - Dr " + user.getNom());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1000, 700);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        add(createHeader(user), BorderLayout.NORTH);
+        add(createHeader(), BorderLayout.NORTH);
         add(createMainPanel(), BorderLayout.CENTER);
         add(createFooter(), BorderLayout.SOUTH);
 
         setVisible(true);
     }
 
-    private JPanel createHeader(Utilisateur user) {
+    private JPanel createHeader() {
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(new Color(231, 141, 82));
         header.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -36,6 +41,13 @@ public class AccueilSpecialisteView extends JFrame {
         welcome.setHorizontalAlignment(SwingConstants.CENTER);
         header.add(welcome, BorderLayout.CENTER);
 
+        JButton logoutButton = new JButton("Déconnexion");
+        logoutButton.addActionListener(e -> {
+            dispose();
+            new ConnexionView();
+        });
+        header.add(logoutButton, BorderLayout.EAST);
+
         return header;
     }
 
@@ -43,22 +55,29 @@ public class AccueilSpecialisteView extends JFrame {
         JPanel main = new JPanel(new BorderLayout());
         main.setBackground(Color.WHITE);
 
-        JLabel title = new JLabel("Vos disponibilités actuelles :");
+        JLabel title = new JLabel("Vos disponibilités :");
         title.setFont(new Font("SansSerif", Font.BOLD, 20));
         title.setHorizontalAlignment(SwingConstants.CENTER);
 
-        // Planning fictif (remplir avec DAO : SELECT * FROM disponibilite WHERE specialiste_id = ...)
         DefaultListModel<String> model = new DefaultListModel<>();
-        model.addElement("2025-04-14 - 09:00 → 09:30 - Clinique du Centre");
-        model.addElement("2025-04-15 - 11:00 → 11:30 - Polyclinique Est");
+        DisponibiliteDAO dispoDAO = new DisponibiliteDAO();
+        List<Disponibilite> liste = dispoDAO.getAllForSpecialiste(user.getId());
 
-        JList<String> planningList = new JList<>(model);
-        JScrollPane scrollPane = new JScrollPane(planningList);
+        if (liste.isEmpty()) {
+            model.addElement("Aucune disponibilité déclarée.");
+        } else {
+            for (Disponibilite d : liste) {
+                model.addElement(d.getDate() + " : " + d.getHeureDebut() + " - " + d.getHeureFin() +
+                        " à " + d.getLieu().getNom() +
+                        (d.isEstDisponible() ? " (Libre)" : " (Occupé)"));
+            }
+        }
+
+        JList<String> dispoList = new JList<>(model);
+        JScrollPane scrollPane = new JScrollPane(dispoList);
 
         JButton addAvailability = new JButton("Ajouter une disponibilité");
-        addAvailability.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Formulaire d'ajout à coder.");
-        });
+        addAvailability.addActionListener(e -> JOptionPane.showMessageDialog(this, "TODO: Formulaire d'ajout à coder."));
 
         main.add(title, BorderLayout.NORTH);
         main.add(scrollPane, BorderLayout.CENTER);
