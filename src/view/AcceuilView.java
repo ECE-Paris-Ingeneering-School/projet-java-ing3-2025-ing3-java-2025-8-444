@@ -43,6 +43,14 @@ public class AcceuilView extends JFrame {
         profil.setLayout(new FlowLayout(FlowLayout.RIGHT));
         //image profil
         JLabel avatar = new JLabel("F");
+        avatar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        avatar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                dispose(); // ferme la page d’accueil
+                new ConnexionView(); // ouvre la page de connexion
+            }
+        });
+
         avatar.setOpaque(true);
         avatar.setBackground(Color.GREEN);
         avatar.setForeground(Color.WHITE);
