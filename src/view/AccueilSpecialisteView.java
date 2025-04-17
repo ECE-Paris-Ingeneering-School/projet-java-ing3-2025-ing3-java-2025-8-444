@@ -3,6 +3,7 @@ package view;
 import dao.DisponibiliteDAO;
 import model.Disponibilite;
 import model.Utilisateur;
+import model.Specialiste;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,12 +42,20 @@ public class AccueilSpecialisteView extends JFrame {
         welcome.setHorizontalAlignment(SwingConstants.CENTER);
         header.add(welcome, BorderLayout.CENTER);
 
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton accueilButton = new JButton("Accueil");
+        accueilButton.addActionListener(e -> {
+            dispose();
+            new AccueilSpecialisteView(user);
+        });
         JButton logoutButton = new JButton("Déconnexion");
         logoutButton.addActionListener(e -> {
             dispose();
             new ConnexionView();
         });
-        header.add(logoutButton, BorderLayout.EAST);
+        buttonPanel.add(accueilButton);
+        buttonPanel.add(logoutButton);
+        header.add(buttonPanel, BorderLayout.EAST);
 
         return header;
     }
@@ -77,7 +86,7 @@ public class AccueilSpecialisteView extends JFrame {
         JScrollPane scrollPane = new JScrollPane(dispoList);
 
         JButton addAvailability = new JButton("Ajouter une disponibilité");
-        addAvailability.addActionListener(e -> JOptionPane.showMessageDialog(this, "TODO: Formulaire d'ajout à coder."));
+        addAvailability.addActionListener(e -> new AjoutDisponibiliteView((Specialiste) user));
 
         main.add(title, BorderLayout.NORTH);
         main.add(scrollPane, BorderLayout.CENTER);
