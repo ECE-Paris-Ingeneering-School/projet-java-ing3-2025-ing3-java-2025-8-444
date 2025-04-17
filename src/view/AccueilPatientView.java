@@ -76,7 +76,10 @@ public class AccueilPatientView extends JFrame {
         JScrollPane scrollPane = new JScrollPane(rdvList);
 
         JButton searchNewRdv = new JButton("Prendre un nouveau rendez-vous");
-        searchNewRdv.addActionListener(e -> JOptionPane.showMessageDialog(this, "TODO: ouvrir interface de recherche."));
+        searchNewRdv.addActionListener(e -> {
+            dispose();
+            new RechercheEtPriseRDVView(user);
+        });
 
         main.add(title, BorderLayout.NORTH);
         main.add(scrollPane, BorderLayout.CENTER);
