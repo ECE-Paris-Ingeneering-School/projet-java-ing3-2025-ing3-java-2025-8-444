@@ -49,10 +49,11 @@ public class RendezVousDAO implements DAO<RendezVous> {
         } catch (SQLException e) { e.printStackTrace(); }
         return list;
     }
+
     public List<RendezVous> getAllForPatient(int patientId) {
         List<RendezVous> list = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM rendezvous WHERE patient_id = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM rendezvous WHERE patient_id = ? AND statut != 'annulé'");
             stmt.setInt(1, patientId);
             ResultSet rs = stmt.executeQuery();
 
@@ -68,6 +69,18 @@ public class RendezVousDAO implements DAO<RendezVous> {
             }
         } catch (SQLException e) { e.printStackTrace(); }
         return list;
+    }
+
+    public boolean annuler(RendezVous rdv) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement("UPDATE rendezvous SET statut = ? WHERE id = ?");
+            stmt.setString(1, "annulé");
+            stmt.setInt(2, rdv.getId());
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override

@@ -100,9 +100,42 @@ public class AccueilPatientView extends JFrame {
         }
 
         JList<String> rdvListFuturs = new JList<>(modelFuturs);
-        JList<String> rdvListPasses = new JList<>(modelPasses);
-
+        rdvListFuturs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scrollFuturs = new JScrollPane(rdvListFuturs);
+
+        JButton annulerButton = new JButton("🗑 Annuler le rendez-vous sélectionné");
+        annulerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        annulerButton.setBackground(new Color(231, 76, 60));
+        annulerButton.setForeground(Color.WHITE);
+        annulerButton.setFocusPainted(false);
+        annulerButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+
+        annulerButton.addActionListener(e -> {
+            int selectedIndex = rdvListFuturs.getSelectedIndex();
+            if (selectedIndex != -1) {
+                RendezVous rdv = liste.get(selectedIndex);
+                int confirm = JOptionPane.showConfirmDialog(
+                        this,
+                        "Souhaitez-vous vraiment annuler ce rendez-vous ?",
+                        "Confirmation",
+                        JOptionPane.YES_NO_OPTION
+                );
+                if (confirm == JOptionPane.YES_OPTION) {
+                    boolean success = new RendezVousDAO().annuler(rdv);
+                    if (success) {
+                        JOptionPane.showMessageDialog(this, "Rendez-vous annulé avec succès.");
+                        dispose();
+                        new AccueilPatientView(user);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Erreur lors de l'annulation.");
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner un rendez-vous à venir.");
+            }
+        });
+
+        JList<String> rdvListPasses = new JList<>(modelPasses);
         JScrollPane scrollPasses = new JScrollPane(rdvListPasses);
 
         JLabel sousTitrePasses = new JLabel("Rendez-vous passés :");
@@ -121,6 +154,8 @@ public class AccueilPatientView extends JFrame {
         content.add(title);
         content.add(Box.createVerticalStrut(10));
         content.add(scrollFuturs);
+        content.add(Box.createVerticalStrut(10));
+        content.add(annulerButton);
         content.add(Box.createVerticalStrut(20));
         content.add(sousTitrePasses);
         content.add(Box.createVerticalStrut(10));
@@ -131,4 +166,5 @@ public class AccueilPatientView extends JFrame {
         wrapper.add(content);
         return wrapper;
     }
+
 }
