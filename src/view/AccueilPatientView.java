@@ -22,76 +22,113 @@ public class AccueilPatientView extends JFrame {
 
         add(createHeader(), BorderLayout.NORTH);
         add(createMainPanel(), BorderLayout.CENTER);
-        add(createFooter(), BorderLayout.SOUTH);
 
+        getContentPane().setBackground(new Color(245, 245, 245));
         setVisible(true);
     }
 
     private JPanel createHeader() {
         JPanel header = new JPanel(new BorderLayout());
-        header.setBackground(new Color(231, 141, 82));
+        header.setBackground(new Color(52, 152, 219));
         header.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
         JLabel logo = new JLabel("Doc'n'Roll");
-        logo.setFont(new Font("SansSerif", Font.BOLD, 20));
-        header.add(logo, BorderLayout.WEST);
+        logo.setFont(new Font("SansSerif", Font.BOLD, 26));
+        logo.setForeground(Color.WHITE);
 
         JLabel welcome = new JLabel("Bonjour " + user.getPrenom() + " !");
-        welcome.setFont(new Font("SansSerif", Font.BOLD, 18));
+        welcome.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        welcome.setForeground(Color.WHITE);
         welcome.setHorizontalAlignment(SwingConstants.CENTER);
-        header.add(welcome, BorderLayout.CENTER);
+
+        JPanel rightButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        rightButtons.setOpaque(false);
+
+        JButton accueilButton = new JButton("Accueil");
+        accueilButton.setBackground(Color.WHITE);
+        accueilButton.addActionListener(e -> {
+            dispose();
+            new AcceuilView(user);
+        });
 
         JButton logoutButton = new JButton("Déconnexion");
+        logoutButton.setBackground(Color.WHITE);
         logoutButton.addActionListener(e -> {
             dispose();
-            new ConnexionView();
+            new AcceuilView();
         });
-        header.add(logoutButton, BorderLayout.EAST);
+
+        rightButtons.add(accueilButton);
+        rightButtons.add(logoutButton);
+
+        header.add(logo, BorderLayout.WEST);
+        header.add(welcome, BorderLayout.CENTER);
+        header.add(rightButtons, BorderLayout.EAST);
 
         return header;
     }
 
     private JPanel createMainPanel() {
-        JPanel main = new JPanel(new BorderLayout());
-        main.setBackground(Color.WHITE);
+        JPanel wrapper = new JPanel(new GridBagLayout());
+        wrapper.setBackground(new Color(245, 245, 245));
 
-        JLabel title = new JLabel("Vos rendez-vous :");
+        JPanel content = new JPanel();
+        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+        content.setBackground(Color.WHITE);
+        content.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+        content.setPreferredSize(new Dimension(800, 500));
+
+        JLabel title = new JLabel("Vos rendez-vous à venir :");
         title.setFont(new Font("SansSerif", Font.BOLD, 20));
-        title.setHorizontalAlignment(SwingConstants.CENTER);
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        DefaultListModel<String> model = new DefaultListModel<>();
+        DefaultListModel<String> modelFuturs = new DefaultListModel<>();
+        DefaultListModel<String> modelPasses = new DefaultListModel<>();
+
         RendezVousDAO rdvDAO = new RendezVousDAO();
         List<RendezVous> liste = rdvDAO.getAllForPatient(user.getId());
 
-        if (liste.isEmpty()) {
-            model.addElement("Aucun rendez-vous trouvé.");
-        } else {
-            for (RendezVous r : liste) {
-                model.addElement(r.getDisponibilite().getDate() + " à " + r.getDisponibilite().getHeureDebut() +
-                        " - " + r.getSpecialiste().getNom() + " (" + r.getStatut() + ")");
+        for (RendezVous r : liste) {
+            String info = r.getDisponibilite().getDate() + " à " + r.getDisponibilite().getHeureDebut() +
+                    " - " + r.getSpecialiste().getNom() + " (" + r.getStatut() + ")";
+            if (r.getStatut().equalsIgnoreCase("passé")) {
+                info += r.getNotes() != null && !r.getNotes().isEmpty() ? "\n\u2022 Note : " + r.getNotes() : "";
+                modelPasses.addElement(info);
+            } else {
+                modelFuturs.addElement(info);
             }
         }
 
-        JList<String> rdvList = new JList<>(model);
-        JScrollPane scrollPane = new JScrollPane(rdvList);
+        JList<String> rdvListFuturs = new JList<>(modelFuturs);
+        JList<String> rdvListPasses = new JList<>(modelPasses);
+
+        JScrollPane scrollFuturs = new JScrollPane(rdvListFuturs);
+        JScrollPane scrollPasses = new JScrollPane(rdvListPasses);
+
+        JLabel sousTitrePasses = new JLabel("Rendez-vous passés :");
+        sousTitrePasses.setFont(new Font("SansSerif", Font.BOLD, 18));
+        sousTitrePasses.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JButton searchNewRdv = new JButton("Prendre un nouveau rendez-vous");
+        searchNewRdv.setBackground(new Color(52, 152, 219));
+        searchNewRdv.setForeground(Color.WHITE);
+        searchNewRdv.setAlignmentX(Component.CENTER_ALIGNMENT);
         searchNewRdv.addActionListener(e -> {
             dispose();
             new RechercheEtPriseRDVView(user);
         });
 
-        main.add(title, BorderLayout.NORTH);
-        main.add(scrollPane, BorderLayout.CENTER);
-        main.add(searchNewRdv, BorderLayout.SOUTH);
+        content.add(title);
+        content.add(Box.createVerticalStrut(10));
+        content.add(scrollFuturs);
+        content.add(Box.createVerticalStrut(20));
+        content.add(sousTitrePasses);
+        content.add(Box.createVerticalStrut(10));
+        content.add(scrollPasses);
+        content.add(Box.createVerticalStrut(20));
+        content.add(searchNewRdv);
 
-        return main;
-    }
-
-    private JPanel createFooter() {
-        JPanel footer = new JPanel();
-        footer.setBackground(Color.WHITE);
-        footer.add(new JLabel("Doc'n'Roll © 2025"));
-        return footer;
+        wrapper.add(content);
+        return wrapper;
     }
 }

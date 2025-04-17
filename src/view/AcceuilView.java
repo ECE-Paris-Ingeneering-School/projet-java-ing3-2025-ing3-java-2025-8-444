@@ -1,21 +1,26 @@
 package view;
 
 import controller.PriseRdvController;
-import model.Disponibilite;
+import model.Utilisateur;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.util.List;
 
 public class AcceuilView extends JFrame {
 
     private JTextField rechercheTexte;
     private PriseRdvController controller = new PriseRdvController();
     private final String placeholder = "Rechercher une spécialité, un médecin, un lieu...";
+    private Utilisateur utilisateur;
 
     public AcceuilView() {
+        this(null);
+    }
+
+    public AcceuilView(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
         setTitle("Doc'n'Roll - Accueil");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 700);
@@ -39,12 +44,22 @@ public class AcceuilView extends JFrame {
         logo.setForeground(Color.WHITE);
         header.add(logo, BorderLayout.WEST);
 
-        JButton connexionBtn = new JButton("Connexion");
-        connexionBtn.addActionListener(e -> {
+        JButton topButton = new JButton(utilisateur == null ? "Connexion" : "Mon compte");
+        topButton.addActionListener(e -> {
             dispose();
-            new ConnexionView();
+            if (utilisateur == null) {
+                new ConnexionView();
+            } else {
+                if (utilisateur instanceof model.Patient) {
+                    new AccueilPatientView(utilisateur);
+                } else if (utilisateur instanceof model.Admin) {
+                    new AccueilAdminView(utilisateur);
+                } else {
+                    new AccueilSpecialisteView(utilisateur);
+                }
+            }
         });
-        header.add(connexionBtn, BorderLayout.EAST);
+        header.add(topButton, BorderLayout.EAST);
 
         return header;
     }
@@ -65,7 +80,6 @@ public class AcceuilView extends JFrame {
         rechercheTexte.setText(placeholder);
         rechercheTexte.setForeground(Color.GRAY);
 
-        // comportement du placeholder
         rechercheTexte.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -106,10 +120,8 @@ public class AcceuilView extends JFrame {
             JOptionPane.showMessageDialog(this, "Entrez un critère de recherche.");
             return;
         }
-        controller.afficherResultats(texte); // 🔁 ici on lance la vraie vue de résultats
+        controller.afficherResultats(texte);
     }
-
-
 
     private JPanel createFooterPanel() {
         JPanel footer = new JPanel(new GridLayout(1, 3));
