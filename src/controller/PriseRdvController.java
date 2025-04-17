@@ -4,8 +4,11 @@ import dao.DAOFactory;
 import dao.DisponibiliteDAO;
 import dao.RendezVousDAO;
 import model.*;
+import view.ResultatsRechercheView;
 
+import javax.swing.*;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class PriseRdvController {
@@ -41,4 +44,27 @@ public class PriseRdvController {
         }
         return false;
     }
+
+    public List<Disponibilite> rechercherDisponibilites(String critere) {
+        String keyword = critere.toLowerCase(Locale.ROOT);
+        return disponibiliteDAO.getAll().stream()
+                .filter(d -> d.isEstDisponible() && (
+                        d.getSpecialiste().getNom().toLowerCase().contains(keyword) ||
+                                d.getSpecialiste().getPrenom().toLowerCase().contains(keyword) ||
+                                d.getSpecialiste().getSpecialite().getNom().toLowerCase().contains(keyword) ||
+                                d.getLieu().getNom().toLowerCase().contains(keyword) ||
+                                d.getLieu().getVille().toLowerCase().contains(keyword)
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public void afficherResultats(String critere) {
+        List<Disponibilite> resultats = rechercherDisponibilites(critere);
+        if (resultats.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Aucun créneau trouvé pour : " + critere);
+        } else {
+            new ResultatsRechercheView(resultats);
+        }
+    }
 }
+

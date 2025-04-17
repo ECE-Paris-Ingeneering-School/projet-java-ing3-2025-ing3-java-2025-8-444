@@ -1,17 +1,27 @@
 package view;
 
+import controller.PriseRdvController;
+import model.Disponibilite;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.util.List;
 
 public class AcceuilView extends JFrame {
 
+    private JTextField rechercheTexte;
+    private PriseRdvController controller = new PriseRdvController();
+    private final String placeholder = "Rechercher une spécialité, un médecin, un lieu...";
+
     public AcceuilView() {
-        setTitle("Doc'n'Roll - Acceuil");
+        setTitle("Doc'n'Roll - Accueil");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 700);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
-        //on ajoute le tout en visible pour que ça s'affiche
+
         add(createHeaderPanel(), BorderLayout.NORTH);
         add(createMainPanel(), BorderLayout.CENTER);
         add(createFooterPanel(), BorderLayout.SOUTH);
@@ -19,103 +29,112 @@ public class AcceuilView extends JFrame {
         setVisible(true);
     }
 
-    //header (toute la bande haute de la page)
     private JPanel createHeaderPanel() {
         JPanel header = new JPanel(new BorderLayout());
-        header.setBackground(new Color(231, 141, 82));//couleur orange pour le fond
+        header.setBackground(new Color(52, 152, 219));
         header.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        //on le "logo" (nom) de l'appli en haut à gauche
-        JLabel logo = new JLabel("Doc'n'Roll");//nom à changer
-        logo.setFont(new Font("SansSerif", Font.BOLD, 20));
+        JLabel logo = new JLabel("Doc'n'Roll");
+        logo.setFont(new Font("SansSerif", Font.BOLD, 26));
+        logo.setForeground(Color.WHITE);
         header.add(logo, BorderLayout.WEST);
 
-        //filtres catégories en haut au centre
-        JPanel filters = new JPanel();
-        filters.setOpaque(false);
-        filters.add(new JComboBox<>(new String[]{"Spécialisation"}));//menu déroulant pour choisir la spécialité qui nous intéresse
-        filters.add(new JComboBox<>(new String[]{"critère choix"}));
-        header.add(filters, BorderLayout.CENTER);
-
-        //profil
-        JPanel profil = new JPanel();
-        profil.setOpaque(false);
-        profil.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        //image profil
-        JLabel avatar = new JLabel("F");
-        avatar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        avatar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                dispose(); // ferme la page d’accueil
-                new ConnexionView(); // ouvre la page de connexion
-            }
+        JButton connexionBtn = new JButton("Connexion");
+        connexionBtn.addActionListener(e -> {
+            dispose();
+            new ConnexionView();
         });
-
-        avatar.setOpaque(true);
-        avatar.setBackground(Color.GREEN);
-        avatar.setForeground(Color.WHITE);
-        avatar.setPreferredSize(new Dimension(40,40));
-        avatar.setHorizontalAlignment(SwingConstants.CENTER);
-        avatar.setFont(new Font("SansSerif", Font.BOLD, 16));
-        avatar.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        //Nom profil
-        JLabel username = new JLabel("Utilisateur Profil");
-        //on ajoute le tout au profil puis le profil à droite du header
-        profil.add(avatar);
-        profil.add(username);
-        header.add(profil, BorderLayout.EAST);
+        header.add(connexionBtn, BorderLayout.EAST);
 
         return header;
     }
 
-    //creation de la partie principale de la page (barre de recheche slogan tout ça)
-    private JPanel createMainPanel(){
+    private JPanel createMainPanel() {
         JPanel main = new JPanel();
-        main.setBackground(new Color(231, 141, 82));//meme orange qu'au dessus
+        main.setBackground(Color.WHITE);
         main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));
 
-        //slogan
-        JLabel slogan = new JLabel("Slogan blablabla santé");//faut trouver un slogan pitié
+        JLabel slogan = new JLabel("Trouvez votre spécialiste en quelques clics");
         slogan.setFont(new Font("SansSerif", Font.BOLD, 32));
         slogan.setAlignmentX(Component.CENTER_ALIGNMENT);
+        slogan.setBorder(BorderFactory.createEmptyBorder(30, 0, 10, 0));
 
-        //barre de recherche
-        JPanel recherche = new JPanel();
-        recherche.setBackground(new Color(231, 141, 82));
-        JTextField rechercheTexte = new JTextField("Nom, spécialité, lieu...");//texte de la barre de recherche
-        JButton rechercheBouton = new  JButton("🔍");//émoji pour faire une image de bouton de recherche
-        //on ajoute le tout à la barre de recherche
-        recherche.add(rechercheTexte);
-        recherche.add(rechercheBouton);
+        rechercheTexte = new JTextField(30);
+        rechercheTexte.setMaximumSize(new Dimension(400, 40));
+        rechercheTexte.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        rechercheTexte.setText(placeholder);
+        rechercheTexte.setForeground(Color.GRAY);
 
-        //maintenant on ajoute le slogan et la barre de recherche à la partie principale de la page
-        main.add(Box.createVerticalStrut(80));//on ajoute une "boite" (endroit sur la page) où mettre notre slogan
+        // comportement du placeholder
+        rechercheTexte.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (rechercheTexte.getText().equals(placeholder)) {
+                    rechercheTexte.setText("");
+                    rechercheTexte.setForeground(Color.BLACK);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (rechercheTexte.getText().isEmpty()) {
+                    rechercheTexte.setText(placeholder);
+                    rechercheTexte.setForeground(Color.GRAY);
+                }
+            }
+        });
+
+        JButton boutonRecherche = new JButton("Rechercher");
+        boutonRecherche.setFont(new Font("SansSerif", Font.BOLD, 16));
+        boutonRecherche.setAlignmentX(Component.CENTER_ALIGNMENT);
+        boutonRecherche.addActionListener(e -> lancerRecherche());
+
+        main.add(Box.createVerticalGlue());
         main.add(slogan);
         main.add(Box.createVerticalStrut(20));
-        main.add(recherche);
+        main.add(rechercheTexte);
+        main.add(Box.createVerticalStrut(10));
+        main.add(boutonRecherche);
+        main.add(Box.createVerticalGlue());
 
         return main;
     }
-    //creation du footer
-    private JPanel createFooterPanel() {
-        JPanel footer = new JPanel(new GridLayout(1, 4));//on fait une grille de 4 colonne une avec le nom de l'appli et 3 avec différentes infos (voir design)
-        footer.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));//tailler du footer
 
-        footer.setBackground(Color.WHITE);
-
-        footer.add(new JLabel("Doc'n'Roll"));
-        //flemme de remplir toutes les infos pour l'instant donc je met ça pour les remplir rapidement
-        for (int i = 0; i < 3; i++) {
-            JPanel column = new JPanel();
-            column.setLayout(new BoxLayout(column, BoxLayout.Y_AXIS));
-            column.add(new JLabel("Topic"));
-            for (int j = 0; j < 3; j++) {
-                column.add(new JLabel("Page"));
-            }
-            footer.add(column);
+    private void lancerRecherche() {
+        String texte = rechercheTexte.getText().trim();
+        if (texte.isEmpty() || texte.equals(placeholder)) {
+            JOptionPane.showMessageDialog(this, "Entrez un critère de recherche.");
+            return;
         }
+        controller.afficherResultats(texte); // 🔁 ici on lance la vraie vue de résultats
+    }
+
+
+
+    private JPanel createFooterPanel() {
+        JPanel footer = new JPanel(new GridLayout(1, 3));
+        footer.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        footer.setBackground(new Color(245, 245, 245));
+
+        footer.add(new JLabel("© 2025 Doc'n'Roll"));
+
+        JPanel info1 = new JPanel();
+        info1.setLayout(new BoxLayout(info1, BoxLayout.Y_AXIS));
+        info1.setOpaque(false);
+        info1.add(new JLabel("À propos"));
+        info1.add(new JLabel("Notre mission"));
+        info1.add(new JLabel("Nos médecins"));
+
+        JPanel info2 = new JPanel();
+        info2.setLayout(new BoxLayout(info2, BoxLayout.Y_AXIS));
+        info2.setOpaque(false);
+        info2.add(new JLabel("Aide"));
+        info2.add(new JLabel("Contact"));
+        info2.add(new JLabel("Conditions d'utilisation"));
+
+        footer.add(info1);
+        footer.add(info2);
 
         return footer;
     }
-
 }
