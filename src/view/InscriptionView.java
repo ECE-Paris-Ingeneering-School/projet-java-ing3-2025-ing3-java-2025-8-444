@@ -17,24 +17,25 @@ public class InscriptionView extends JFrame {
     public InscriptionView() {
         controller = new PatientController();
         setTitle("Inscription - Doc'n'Roll");
-        setSize(600, 400);
+        setSize(1000, 700);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
         add(createHeaderPanel(), BorderLayout.NORTH);
-        add(createFormPanel(), BorderLayout.CENTER);
+        add(createMainPanel(), BorderLayout.CENTER);
 
+        getContentPane().setBackground(new Color(245, 245, 245));
         setVisible(true);
     }
 
     private JPanel createHeaderPanel() {
         JPanel header = new JPanel(new BorderLayout());
-        header.setBackground(new Color(255, 140, 0));
+        header.setBackground(new Color(52, 152, 219));
         header.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
         JLabel logo = new JLabel("Doc'n'Roll");
-        logo.setFont(new Font("Arial", Font.BOLD, 24));
+        logo.setFont(new Font("SansSerif", Font.BOLD, 26));
         logo.setForeground(Color.WHITE);
 
         JButton retour = new JButton("Retour à la connexion");
@@ -49,10 +50,18 @@ public class InscriptionView extends JFrame {
         return header;
     }
 
-    private JPanel createFormPanel() {
-        JPanel panel = new JPanel(new GridBagLayout());
+    private JPanel createMainPanel() {
+        JPanel wrapper = new JPanel(new GridBagLayout());
+        wrapper.setBackground(new Color(245, 245, 245));
+
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        formPanel.setBackground(Color.WHITE);
+        formPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         GridBagConstraints gbc = new GridBagConstraints();
-        panel.setBackground(Color.WHITE);
+
+        JLabel titre = new JLabel("Créer un compte patient");
+        titre.setFont(new Font("SansSerif", Font.BOLD, 24));
+        titre.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
 
         JLabel nomLabel = new JLabel("Nom :");
         JLabel prenomLabel = new JLabel("Prénom :");
@@ -65,36 +74,39 @@ public class InscriptionView extends JFrame {
         passwordField = new JPasswordField(20);
 
         JButton registerButton = new JButton("S'inscrire");
-        registerButton.setBackground(new Color(255, 140, 0));
+        registerButton.setBackground(new Color(52, 152, 219));
         registerButton.setForeground(Color.WHITE);
         registerButton.addActionListener(this::handleRegister);
 
         gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+        formPanel.add(titre, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 0;
-        panel.add(nomLabel, gbc);
+        gbc.gridwidth = 1; gbc.gridy = 1; gbc.gridx = 0;
+        formPanel.add(nomLabel, gbc);
         gbc.gridx = 1;
-        panel.add(nomField, gbc);
+        formPanel.add(nomField, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 1;
-        panel.add(prenomLabel, gbc);
+        gbc.gridy = 2; gbc.gridx = 0;
+        formPanel.add(prenomLabel, gbc);
         gbc.gridx = 1;
-        panel.add(prenomField, gbc);
+        formPanel.add(prenomField, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 2;
-        panel.add(emailLabel, gbc);
+        gbc.gridy = 3; gbc.gridx = 0;
+        formPanel.add(emailLabel, gbc);
         gbc.gridx = 1;
-        panel.add(emailField, gbc);
+        formPanel.add(emailField, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 3;
-        panel.add(mdpLabel, gbc);
+        gbc.gridy = 4; gbc.gridx = 0;
+        formPanel.add(mdpLabel, gbc);
         gbc.gridx = 1;
-        panel.add(passwordField, gbc);
+        formPanel.add(passwordField, gbc);
 
-        gbc.gridx = 1; gbc.gridy = 4;
-        panel.add(registerButton, gbc);
+        gbc.gridy = 5; gbc.gridx = 1;
+        formPanel.add(registerButton, gbc);
 
-        return panel;
+        wrapper.add(formPanel);
+        return wrapper;
     }
 
     private void handleRegister(ActionEvent e) {
@@ -116,7 +128,6 @@ public class InscriptionView extends JFrame {
         if (controller.inscrirePatient(nom, prenom, email, mdp)) {
             JOptionPane.showMessageDialog(this, "Inscription réussie ! Bienvenue " + prenom + " !");
             dispose();
-            // Connexion directe au tableau de bord patient
             Patient newPatient = controller.getPatientByEmail(email);
             new AccueilPatientView(newPatient);
         } else {

@@ -15,24 +15,24 @@ public class ConnexionView extends JFrame {
     public ConnexionView() {
         controller = new ConnexionController();
         setTitle("Connexion - Doc'n'Roll");
-        setSize(600, 400);
+        setSize(1000, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
         add(createHeaderPanel(), BorderLayout.NORTH);
-        add(createConnexionPanel(), BorderLayout.CENTER);
+        add(createMainPanel(), BorderLayout.CENTER);
 
         setVisible(true);
     }
 
     private JPanel createHeaderPanel() {
         JPanel header = new JPanel(new BorderLayout());
-        header.setBackground(new Color(255, 140, 0));
+        header.setBackground(new Color(52, 152, 219));
         header.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
         JLabel logo = new JLabel("Doc'n'Roll");
-        logo.setFont(new Font("Arial", Font.BOLD, 24));
+        logo.setFont(new Font("SansSerif", Font.BOLD, 26));
         logo.setForeground(Color.WHITE);
 
         JButton retour = new JButton("Retour à l'accueil");
@@ -47,22 +47,33 @@ public class ConnexionView extends JFrame {
         return header;
     }
 
-    private JPanel createConnexionPanel() {
-        JPanel panel = new JPanel(new GridBagLayout());
+    private JPanel createMainPanel() {
+        JPanel panel = new JPanel();
+        panel.setBackground(new Color(245, 245, 245)); // gris très clair
+        panel.setLayout(new GridBagLayout());
+
+        JPanel formWrapper = new JPanel(new GridBagLayout());
+        formWrapper.setBackground(Color.WHITE);
+        formWrapper.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
+
         GridBagConstraints gbc = new GridBagConstraints();
-        panel.setBackground(Color.WHITE);
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        JLabel titre = new JLabel("Connectez-vous à votre compte");
+        titre.setFont(new Font("SansSerif", Font.BOLD, 22));
+        titre.setHorizontalAlignment(SwingConstants.CENTER);
 
         JLabel emailLabel = new JLabel("Email :");
         JLabel passwordLabel = new JLabel("Mot de passe :");
         emailField = new JTextField(20);
         passwordField = new JPasswordField(20);
-        JButton loginButton = new JButton("Connexion");
-        JButton registerButton = new JButton("Créer un compte patient");
 
-        loginButton.setBackground(new Color(255, 140, 0));
+        JButton loginButton = new JButton("Connexion");
+        loginButton.setBackground(new Color(52, 152, 219));
         loginButton.setForeground(Color.WHITE);
         loginButton.addActionListener(this::handleLogin);
 
+        JButton registerButton = new JButton("Créer un compte patient");
         registerButton.setForeground(Color.BLUE);
         registerButton.setBorderPainted(false);
         registerButton.setContentAreaFilled(false);
@@ -73,23 +84,26 @@ public class ConnexionView extends JFrame {
             new InscriptionView();
         });
 
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.gridx = 0; gbc.gridy = 0;
-        panel.add(emailLabel, gbc);
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+        formWrapper.add(titre, gbc);
+
+        gbc.gridwidth = 1; gbc.gridy++;
+        formWrapper.add(emailLabel, gbc);
         gbc.gridx = 1;
-        panel.add(emailField, gbc);
+        formWrapper.add(emailField, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 1;
-        panel.add(passwordLabel, gbc);
+        gbc.gridx = 0; gbc.gridy++;
+        formWrapper.add(passwordLabel, gbc);
         gbc.gridx = 1;
-        panel.add(passwordField, gbc);
+        formWrapper.add(passwordField, gbc);
 
-        gbc.gridx = 1; gbc.gridy = 2;
-        panel.add(loginButton, gbc);
+        gbc.gridx = 1; gbc.gridy++;
+        formWrapper.add(loginButton, gbc);
 
-        gbc.gridx = 1; gbc.gridy = 3;
-        panel.add(registerButton, gbc);
+        gbc.gridy++;
+        formWrapper.add(registerButton, gbc);
 
+        panel.add(formWrapper);
         return panel;
     }
 
