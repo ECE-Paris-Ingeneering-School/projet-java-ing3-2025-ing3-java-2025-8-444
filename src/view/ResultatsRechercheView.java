@@ -49,7 +49,7 @@ public class ResultatsRechercheView extends JFrame {
         panel.setBackground(Color.WHITE);
 
         for (Disponibilite d : resultats) {
-            Specialiste s = d.getSpecialiste();
+            final Specialiste specialiste = d.getSpecialiste();
 
             JPanel card = new JPanel();
             card.setLayout(new GridLayout(3, 1));
@@ -57,8 +57,19 @@ public class ResultatsRechercheView extends JFrame {
                     BorderFactory.createEmptyBorder(10, 10, 10, 10),
                     BorderFactory.createLineBorder(new Color(200, 200, 200))));
 
-            JLabel titre = new JLabel("Dr " + s.getPrenom() + " " + s.getNom() + " - " + s.getSpecialite().getNom());
+            JLabel titre = new JLabel("<html><u>Dr " + specialiste.getPrenom() + " " + specialiste.getNom() + " - " + specialiste.getSpecialite().getNom() + "</u></html>");
             titre.setFont(new Font("SansSerif", Font.BOLD, 16));
+            titre.setForeground(Color.BLUE);
+            titre.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+            titre.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    List<Disponibilite> dispos = PriseRdvController.getDisponibilitesPourSpecialiste(specialiste);
+                    new ProfilSpecialisteView(specialiste, dispos);
+                }
+            });
+
             JLabel infos = new JLabel("Lieu : " + d.getLieu().getNom() + ", " + d.getLieu().getVille());
             JLabel horaire = new JLabel("Date : " + d.getDate() + " | " + d.getHeureDebut() + " - " + d.getHeureFin());
 
