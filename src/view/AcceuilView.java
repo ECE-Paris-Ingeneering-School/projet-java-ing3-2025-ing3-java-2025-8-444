@@ -1,6 +1,8 @@
 package view;
 
 import controller.PriseRdvController;
+import exception.RechercheInvalideException;
+import exception.UtilisateurInconnuException;
 import model.Utilisateur;
 
 import javax.swing.*;
@@ -8,13 +10,16 @@ import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
+//hérite de JFrame donc graphic swing
 public class AcceuilView extends JFrame {
 
+    //attributs
     private JTextField rechercheTexte;
     private PriseRdvController controller = new PriseRdvController();
     private final String placeholder = "Rechercher une spécialité, un médecin, un lieu...";
     private Utilisateur utilisateur;
 
+    //constructeurs
     public AcceuilView() {
         this(null);
     }
@@ -34,6 +39,7 @@ public class AcceuilView extends JFrame {
         setVisible(true);
     }
 
+    //header
     private JPanel createHeaderPanel() {
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(new Color(52, 152, 219));
@@ -55,7 +61,8 @@ public class AcceuilView extends JFrame {
                 } else if (utilisateur instanceof model.Admin) {
                     new AccueilAdminView(utilisateur);
                 } else {
-                    new AccueilSpecialisteView(utilisateur);
+                    throw new UtilisateurInconnuException("Type d'utilisateur non pris en charge : " + utilisateur.
+                            getClass().getSimpleName());
                 }
             }
         });
@@ -64,6 +71,7 @@ public class AcceuilView extends JFrame {
         return header;
     }
 
+    //page centrale
     private JPanel createMainPanel() {
         JPanel main = new JPanel();
         main.setBackground(Color.WHITE);
@@ -114,15 +122,20 @@ public class AcceuilView extends JFrame {
         return main;
     }
 
+    //fonction qui lance la recherche
     private void lancerRecherche() {
         String texte = rechercheTexte.getText().trim();
-        if (texte.isEmpty() || texte.equals(placeholder)) {
-            JOptionPane.showMessageDialog(this, "Entrez un critère de recherche.");
-            return;
+        try {
+            if (texte.isEmpty() || texte.equals(placeholder)) {
+                throw new RechercheInvalideException("Le champ de recherche est vide.");
+            }
+            controller.afficherResultats(texte);
+        } catch (RechercheInvalideException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }
-        controller.afficherResultats(texte);
     }
 
+    //footer
     private JPanel createFooterPanel() {
         JPanel footer = new JPanel(new GridLayout(1, 3));
         footer.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
