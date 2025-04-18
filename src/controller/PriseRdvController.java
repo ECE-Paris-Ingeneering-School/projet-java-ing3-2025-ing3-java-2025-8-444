@@ -66,5 +66,12 @@ public class PriseRdvController {
             new ResultatsRechercheView(resultats);
         }
     }
+
+    public static List<Disponibilite> getDisponibilitesPourSpecialiste(Specialiste specialiste) {
+        return disponibiliteDAO.getAll().stream()
+                .filter(d -> d.isEstDisponible() &&
+                        d.getSpecialiste().equals(specialiste))
+                .collect(Collectors.toList());
+    }
 }
 
