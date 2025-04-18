@@ -21,7 +21,8 @@ public class AdminController {
         return specialiteDAO.getAll();
     }
 
-    public boolean ajouterSpecialiste(String nom, String prenom, String email, String mdp, String qualification, String specialiteNom) {
+    public boolean ajouterSpecialiste(String nom, String prenom, String email, String mdp, String qualification,
+                                      String specialiteNom) {
         Specialite specialite = specialiteDAO.getByName(specialiteNom);
         if (specialite == null) return false;
 
