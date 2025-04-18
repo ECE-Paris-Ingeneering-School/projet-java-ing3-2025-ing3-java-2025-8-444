@@ -31,4 +31,11 @@ public abstract class Utilisateur {
     public String toString() {
         return nom + " " + prenom + " (" + email + ")";
     }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Specialiste)) return false;
+        Specialiste s = (Specialiste) o;
+        return this.getId() == s.getId(); // ou .equals() si ID est un objet
+    }
 }
