@@ -12,7 +12,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class PriseRdvController {
-    private DisponibiliteDAO disponibiliteDAO;
+    private static DisponibiliteDAO disponibiliteDAO;
     private RendezVousDAO rendezVousDAO;
 
     public PriseRdvController() {
