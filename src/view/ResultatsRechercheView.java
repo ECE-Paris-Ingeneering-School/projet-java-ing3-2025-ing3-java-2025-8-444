@@ -9,6 +9,7 @@ import java.util.List;
 
 public class ResultatsRechercheView extends JFrame {
 
+    //affiche les resultats 
     public ResultatsRechercheView(List<Disponibilite> resultats) {
         setTitle("Résultats de la recherche - Doc'n'Roll");
         setSize(900, 600);
@@ -22,6 +23,7 @@ public class ResultatsRechercheView extends JFrame {
         setVisible(true);
     }
 
+    //header
     private JPanel createHeaderPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));

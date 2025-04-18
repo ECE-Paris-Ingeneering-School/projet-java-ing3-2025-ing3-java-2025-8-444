@@ -53,17 +53,21 @@ public class AcceuilView extends JFrame {
         JButton topButton = new JButton(utilisateur == null ? "Connexion" : "Mon compte");
         topButton.addActionListener(e -> {
             dispose();
-            if (utilisateur == null) {
-                new ConnexionView();
-            } else {
-                if (utilisateur instanceof model.Patient) {
-                    new AccueilPatientView(utilisateur);
-                } else if (utilisateur instanceof model.Admin) {
-                    new AccueilAdminView(utilisateur);
+            try {
+                if (utilisateur == null) {
+                    new ConnexionView();
                 } else {
-                    throw new UtilisateurInconnuException("Type d'utilisateur non pris en charge : " + utilisateur.
-                            getClass().getSimpleName());
+                    if (utilisateur instanceof model.Patient) {
+                        new AccueilPatientView(utilisateur);
+                    } else if (utilisateur instanceof model.Admin) {
+                        new AccueilAdminView(utilisateur);
+                    } else {
+                        throw new UtilisateurInconnuException("Type d'utilisateur non pris en charge : " + utilisateur.
+                                getClass().getSimpleName());
+                    }
                 }
+            } catch (UtilisateurInconnuException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
             }
         });
         header.add(topButton, BorderLayout.EAST);
