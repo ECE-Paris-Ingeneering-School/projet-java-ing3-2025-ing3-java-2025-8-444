@@ -1,0 +1,75 @@
+package view;
+
+import model.Disponibilite;
+import model.Specialiste;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
+
+public class ProfilSpecialisteView extends JFrame {
+
+    public ProfilSpecialisteView(Specialiste specialiste, List<Disponibilite> disponibilites) {
+        setTitle("Profil du Spécialiste - Doc'n'Roll");
+        setSize(800, 600);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout());
+
+        add(createHeaderPanel(specialiste), BorderLayout.NORTH);
+        add(createBodyPanel(specialiste, disponibilites), BorderLayout.CENTER);
+
+        setVisible(true);
+    }
+
+    private JPanel createHeaderPanel(Specialiste s) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        panel.setBackground(new Color(52, 152, 219));
+
+        JLabel title = new JLabel("Doc'n'Roll - Dr " + s.getPrenom() + " " + s.getNom());
+        title.setFont(new Font("SansSerif", Font.BOLD, 22));
+        title.setForeground(Color.WHITE);
+        panel.add(title, BorderLayout.CENTER);
+
+        JButton fermer = new JButton("Fermer");
+        fermer.addActionListener(e -> dispose());
+        panel.add(fermer, BorderLayout.EAST);
+
+        return panel;
+    }
+
+    private JScrollPane createBodyPanel(Specialiste s, List<Disponibilite> disponibilites) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+
+        // Infos du spécialiste
+        JLabel info = new JLabel("<html><h2>Spécialité : " + s.getSpecialite().getNom() + "</h2></html>");
+        info.setAlignmentX(Component.LEFT_ALIGNMENT);
+        panel.add(info);
+        panel.add(Box.createVerticalStrut(20));
+
+        // Disponibilités
+        for (Disponibilite d : disponibilites) {
+            JPanel dispoCard = new JPanel(new GridLayout(2, 1));
+            dispoCard.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createEmptyBorder(10, 10, 10, 10),
+                    BorderFactory.createLineBorder(new Color(200, 200, 200))
+            ));
+
+            JLabel lieu = new JLabel("Lieu : " + d.getLieu().getNom() + ", " + d.getLieu().getVille());
+            JLabel horaire = new JLabel("Date : " + d.getDate() + " | " + d.getHeureDebut() + " - " + d.getHeureFin());
+
+            dispoCard.add(lieu);
+            dispoCard.add(horaire);
+
+            dispoCard.setAlignmentX(Component.LEFT_ALIGNMENT);
+            panel.add(dispoCard);
+            panel.add(Box.createVerticalStrut(10));
+        }
+
+        return new JScrollPane(panel);
+    }
+}
