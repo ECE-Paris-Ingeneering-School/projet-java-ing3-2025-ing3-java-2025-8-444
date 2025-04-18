@@ -2,9 +2,9 @@ package model;
 
 public class RendezVous {
     private int id;
-    private model.Patient patient;
+    private Patient patient;
     private Specialiste specialiste;
-    private model.Disponibilite disponibilite;
+    private Disponibilite disponibilite;
     private String statut;
     private String notes;
 
@@ -21,7 +21,6 @@ public class RendezVous {
     public model.Lieu getLieu() {
         return disponibilite.getLieu();
     }
-
     public int getId() { return id; }
     public model.Patient getPatient() { return patient; }
     public Specialiste getSpecialiste() { return specialiste; }

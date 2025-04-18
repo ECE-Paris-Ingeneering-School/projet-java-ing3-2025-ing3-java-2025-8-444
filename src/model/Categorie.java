@@ -37,4 +37,36 @@ public class Categorie {
     public void setSpecialiste(Specialiste[] specialiste) {
         this.specialiste = specialiste;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 }
