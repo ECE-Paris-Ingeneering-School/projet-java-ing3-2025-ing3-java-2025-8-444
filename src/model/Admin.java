@@ -1,5 +1,11 @@
 package model;
 
+/* Sources :
+https://drive.google.com/file/d/10Qu73GKToaf7oOndfdIq0Zd4hZA8Z7Uc/view
+https://drive.google.com/file/d/1QZy3Q5R-kIY697UORIlo7DmL8ZY_Kcwo/view
+https://drive.google.com/file/d/1jUEKNnXz6l-_FBw6AGSPawFFzJeSDmTS/view
+*/
+
 /**
  * Classe représentant un administrateur
  * Un administrateur est un utilisateur avec des droits de gestion supplémentaires.
