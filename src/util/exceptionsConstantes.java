@@ -29,6 +29,8 @@ public class exceptionsConstantes {
         public static final String ERREUR_DAO_SPECIALISTE = "Erreur lors d'une opération sur Specialiste dans la base de données.";
         public static final String ERREUR_DAO_SPECIALITE = "Erreur lors d'une opération sur Specialite dans la base de données.";
 
+        public static final String ERREUR_ENVOI_MAIL = "Erreur lors de l'envoi du mail.";
+
 
 }
 

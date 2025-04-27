@@ -2,7 +2,7 @@ package view;
 
 import controller.PatientController;
 import model.Patient;
-import controller.mail;
+import controller.Mail;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +14,7 @@ public class InscriptionView extends JFrame {
     private JTextField emailField;
     private JPasswordField passwordField;
     private PatientController controller;
-    private mail mail;
+    private Mail mail;
 
     public InscriptionView() {
         controller = new PatientController();
@@ -24,7 +24,7 @@ public class InscriptionView extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        this.mail = new mail();
+        this.mail = new Mail();
 
         add(createHeaderPanel(), BorderLayout.NORTH);
         add(createMainPanel(), BorderLayout.CENTER);

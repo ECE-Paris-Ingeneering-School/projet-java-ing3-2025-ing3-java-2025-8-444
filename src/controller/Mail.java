@@ -1,15 +1,19 @@
 package controller;
 
 import model.*;
+import exceptions.EnvoiMailException;
+
 import javax.mail.*;
 import javax.mail.internet.*;
 import java.util.Properties;
 import javax.activation.*;
 
-public class mail {
-    public mail mail;
+import static util.exceptionsConstantes.ERREUR_ENVOI_MAIL;
 
-    public void envoimail(Utilisateur user, String mail){
+public class Mail {
+    public Mail mail;
+
+    public void envoimail(Utilisateur user, String mail) {
         final String username = "9db28b37dcafa5";
         final String password = "85a2214c2581cc";
 
@@ -19,7 +23,7 @@ public class mail {
         props.put("mail.smtp.host", "sandbox.smtp.mailtrap.io");
         props.put("mail.smtp.port", "587");
 
-        Session session = Session.getInstance(props, new Authenticator() {
+        javax.mail.Session session = javax.mail.Session.getInstance(props, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
             }
@@ -38,7 +42,9 @@ public class mail {
 
             System.out.println("Mail envoyé avec succès via Mailtrap !");
         } catch (MessagingException e) {
-            e.printStackTrace();
+            throw new EnvoiMailException(ERREUR_ENVOI_MAIL, e);
+        } catch (EnvoiMailException e) {
+            System.err.println("Erreur lors de l'envoi du mail : " + e.getMessage());
         }
     }
 }
