@@ -138,4 +138,19 @@ public class RendezVousDAO implements DAO<RendezVous> {
             throw new DaoOperationException(ERREUR_DAO_RDV, e);
         }
     }
+
+    public boolean updateStatut(RendezVous rdv) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "UPDATE RendezVous SET statut = ? WHERE id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, rdv.getStatut());
+            ps.setInt(2, rdv.getId());
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 }
