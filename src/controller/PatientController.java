@@ -12,6 +12,14 @@ import java.util.List;
 public class PatientController {
 
     /**
+     * Constructeur par défaut.
+     * Nécessaire pour créer une instance de PatientController.
+     */
+    public PatientController() {
+        // Aucune initialisation spécifique nécessaire
+    }
+
+    /**
      * Inscrit un nouveau patient dans le système.
      *
      * @param nom Le nom du patient.

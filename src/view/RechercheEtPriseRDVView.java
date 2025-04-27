@@ -26,7 +26,7 @@ public class RechercheEtPriseRDVView extends JFrame {
 
     /**
      * Composée d'un header et un main panel
-     * @param user
+     * @param user On envoie l'utilisateur
      */
     public RechercheEtPriseRDVView(Utilisateur user) {
         this.user = user;

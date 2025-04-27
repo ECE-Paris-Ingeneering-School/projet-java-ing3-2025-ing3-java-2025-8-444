@@ -17,6 +17,14 @@ import static util.exceptionsConstantes.ERREUR_DAO_PATIENT;
 public class PatientDAO implements DAO<Patient> {
 
     /**
+     * Constructeur par défaut.
+     * Nécessaire pour créer une instance de PatientDAO.
+     */
+    public PatientDAO() {
+        // Aucune initialisation spécifique nécessaire
+    }
+
+    /**
      * Récupère un patient par son identifiant.
      *
      * @param id L'identifiant du patient.

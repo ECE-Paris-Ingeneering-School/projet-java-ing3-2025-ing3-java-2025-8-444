@@ -21,6 +21,14 @@ public class DisponibiliteDAO implements DAO<Disponibilite> {
     private final SpecialisteDAO specialisteDAO = new SpecialisteDAO();
 
     /**
+     * Constructeur par défaut.
+     * Initialise le DAO sans configuration particulière.
+     */
+    public DisponibiliteDAO() {
+        // Rien de spécifique à initialiser
+    }
+
+    /**
      * Récupère une disponibilité par son identifiant.
      *
      * @param id L'identifiant de la disponibilité.

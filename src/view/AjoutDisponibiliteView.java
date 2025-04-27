@@ -28,7 +28,7 @@ public class AjoutDisponibiliteView extends JFrame {
 
     /**
      * Page composée de champs à remplir et d'un bouton de confirmation
-     * @param specialiste
+     * @param specialiste L'objet représentant un spécialiste pour lequel la disponibilité est ajoutée
      */
     public AjoutDisponibiliteView(Specialiste specialiste) {
         this.specialiste = specialiste;

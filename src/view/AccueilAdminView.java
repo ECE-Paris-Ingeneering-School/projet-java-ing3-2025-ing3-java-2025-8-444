@@ -13,7 +13,7 @@ public class AccueilAdminView extends JFrame {
 
     /**
      * la page d'accueil a en parametre l'utilisateur connecté. composée d'un Header et d'un main panel
-     * @param user
+     * @param user on envoie l'utilisateur qui utilise l'acceuil
      */
     public AccueilAdminView(Utilisateur user) {
         setTitle("Espace Admin - Bienvenue " + user.getNom());

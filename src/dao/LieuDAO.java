@@ -17,6 +17,14 @@ import static util.exceptionsConstantes.ERREUR_DAO_LIEU;
 public class LieuDAO implements DAO<Lieu> {
 
     /**
+     * Constructeur par défaut pour l'initialisation de l'objet LieuDAO.
+     * Il initialise l'objet sans paramètres spécifiques.
+     */
+    public LieuDAO() {
+        // Pas de code nécessaire si le constructeur est vide
+    }
+
+    /**
      * Récupère un lieu par son identifiant.
      *
      * @param id L'identifiant du lieu.

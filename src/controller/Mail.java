@@ -1,6 +1,6 @@
 package controller;
 
-import model.*;
+import model.Utilisateur;
 import exceptions.EnvoiMailException;
 
 import javax.mail.*;
@@ -13,13 +13,25 @@ import static util.exceptionsConstantes.ERREUR_ENVOI_MAIL;
  * Classe pour gérer l'envoi de mails aux utilisateurs.
  */
 public class Mail {
+
+    /**
+     * Instance interne de Mail (peut servir pour la réutilisation de la configuration).
+     */
     public Mail mail;
+
+    /**
+     * Constructeur par défaut.
+     * Initialise un nouvel objet Mail sans configuration supplémentaire.
+     */
+    public Mail() {
+        // Pas de configuration supplémentaire nécessaire
+    }
 
     /**
      * Envoie un email à un utilisateur donné avec le contenu spécifié.
      *
-     * @param user Utilisateur destinataire du mail.
-     * @param mail Contenu du mail à envoyer.
+     * @param user   Utilisateur destinataire du mail.
+     * @param mail   Contenu du mail à envoyer.
      */
     public void envoimail(Utilisateur user, String mail) {
         final String username = "9db28b37dcafa5";
@@ -32,6 +44,7 @@ public class Mail {
         props.put("mail.smtp.port", "587");
 
         Session session = Session.getInstance(props, new Authenticator() {
+            @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
             }
@@ -47,7 +60,6 @@ public class Mail {
             message.setText(mail);
 
             Transport.send(message);
-
             System.out.println("Mail envoyé avec succès via Mailtrap !");
         } catch (MessagingException e) {
             throw new EnvoiMailException(ERREUR_ENVOI_MAIL, e);

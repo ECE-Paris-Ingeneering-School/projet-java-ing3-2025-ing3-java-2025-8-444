@@ -17,6 +17,14 @@ import static util.exceptionsConstantes.ERREUR_CREATION_DAO;
 public class DAOFactory {
     private static Connection connection;
 
+    /**
+     * Constructeur par défaut.
+     * Initialise le DAO sans configuration particulière.
+     */
+    public DAOFactory() {
+        // Rien de spécifique à initialiser
+    }
+
     static {
         try {
             connection = DatabaseConnection.getConnection();

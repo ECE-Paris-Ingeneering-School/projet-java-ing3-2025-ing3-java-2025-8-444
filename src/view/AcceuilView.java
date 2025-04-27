@@ -28,7 +28,7 @@ public class AcceuilView extends JFrame {
 
     /**Structure de la page d'accueil, titre, taille, composée d'un header, un main panel et un footer
      *
-     * @param utilisateur
+     * @param utilisateur on envoie l'utilisateur qui utilise l'acceuil
      */
     public AcceuilView(Utilisateur utilisateur) {
         this.utilisateur = utilisateur;

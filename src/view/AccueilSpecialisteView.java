@@ -26,7 +26,7 @@ public class AccueilSpecialisteView extends JFrame {
     /**
      * La page prend l'utilisateur en parametre
      * un header et un main panel
-     * @param user
+     * @param user on envoie quel utilisateur utilise le tableau de bord
      */
     public AccueilSpecialisteView(Utilisateur user) {
         this.user = user;

@@ -13,6 +13,14 @@ import static util.exceptionsConstantes.UTILISATEUR_NON_TROUVE;
 public class ConnexionController {
 
     /**
+     * Constructeur par défaut.
+     * Initialise le controller sans configuration particulière.
+     */
+    public ConnexionController() {
+        // Rien de spécifique à initialiser
+    }
+
+    /**
      * Connecte un utilisateur selon son email et son mot de passe.
      * Cherche parmi les patients, administrateurs et spécialistes.
      *

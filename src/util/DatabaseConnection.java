@@ -13,6 +13,13 @@ public class DatabaseConnection {
     private static final String USER = "root";
     private static final String PASSWORD = "";
 
+    /**
+     * Constructeur par défaut.
+     * Initialise sans configuration particulière.
+     */
+    public DatabaseConnection() {
+        // Rien de spécifique à initialiser
+    }
     static {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");

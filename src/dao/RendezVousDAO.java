@@ -20,6 +20,14 @@ public class RendezVousDAO implements DAO<RendezVous> {
     private final DisponibiliteDAO disponibiliteDAO = new DisponibiliteDAO();
 
     /**
+     * Constructeur par défaut.
+     * Initialise un nouvel objet RendezVousDAO sans configuration supplémentaire.
+     */
+    public RendezVousDAO() {
+        // Pas d'initialisation spécifique nécessaire
+    }
+
+    /**
      * Récupère un rendez-vous par son identifiant.
      *
      * @param id L'identifiant du rendez-vous.

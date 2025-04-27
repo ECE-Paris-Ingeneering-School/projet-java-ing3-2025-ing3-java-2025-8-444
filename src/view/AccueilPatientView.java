@@ -20,7 +20,7 @@ public class AccueilPatientView extends JFrame {
 
     /**
      * Header et main panel
-     * @param user
+     * @param user on envoie l'utilisateur qui utilise le tableau de bord
      */
     public AccueilPatientView(Utilisateur user) {
         this.user = user;

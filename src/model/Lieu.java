@@ -30,35 +30,64 @@ public class Lieu {
         this.codePostal = codePostal;
     }
 
-
-    /** @return l'identifiant du lieu */
+    /**
+     * Récupère l'identifiant du lieu.
+     * @return l'identifiant du lieu
+     */
     public int getId() { return id; }
 
-    /** @return le nom du lieu */
+    /**
+     * Récupère le nom du lieu.
+     * @return le nom du lieu
+     */
     public String getNom() { return nom; }
 
-    /** @return l'adresse du lieu */
+    /**
+     * Récupère l'adresse du lieu.
+     * @return l'adresse du lieu
+     */
     public String getAdresse() { return adresse; }
 
-    /** @return la ville du lieu */
+    /**
+     * Récupère la ville du lieu.
+     * @return la ville du lieu
+     */
     public String getVille() { return ville; }
 
-    /** @return le code postal du lieu */
+    /**
+     * Récupère le code postal du lieu.
+     * @return le code postal du lieu
+     */
     public String getCodePostal() { return codePostal; }
 
-
-    /** @param id définit l'identifiant du lieu */
+    /**
+     * Définit l'identifiant du lieu.
+     * @param id l'identifiant du lieu à définir
+     */
     public void setId(int id) { this.id = id; }
 
-    /** @param nom définit le nom du lieu */
+    /**
+     * Définit le nom du lieu.
+     * @param nom le nom du lieu à définir
+     */
     public void setNom(String nom) { this.nom = nom; }
 
-    /** @param adresse définit l'adresse du lieu */
+    /**
+     * Définit l'adresse du lieu.
+     * @param adresse l'adresse du lieu à définir
+     */
     public void setAdresse(String adresse) { this.adresse = adresse; }
 
-    /** @param ville définit la ville du lieu */
+    /**
+     * Définit la ville du lieu.
+     * @param ville la ville du lieu à définir
+     */
     public void setVille(String ville) { this.ville = ville; }
 
-    /** @param codePostal définit le code postal du lieu */
+    /**
+     * Définit le code postal du lieu.
+     * @param codePostal le code postal du lieu à définir
+     */
     public void setCodePostal(String codePostal) { this.codePostal = codePostal; }
+
 }

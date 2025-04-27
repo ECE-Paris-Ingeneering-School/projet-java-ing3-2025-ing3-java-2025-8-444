@@ -21,8 +21,8 @@ public class ResultatsRechercheView extends JFrame {
 
     /**
      * Composée d'un Header et d'un main panel (resultats)
-     * @param resultats
-     * @param user
+     * @param resultats resultats des disponibilités
+     * @param user utilisateur qui fait la recherche
      */
     public ResultatsRechercheView(List<Disponibilite> resultats, Utilisateur user) {
         this.user = user;

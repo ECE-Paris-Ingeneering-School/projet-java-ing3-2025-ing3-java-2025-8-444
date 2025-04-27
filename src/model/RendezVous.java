@@ -45,40 +45,88 @@ public class RendezVous {
         return disponibilite.getLieu();
     }
 
-    /** @return l'identifiant du rendez-vous */
+    /**
+     * Retourne l'identifiant du rendez-vous.
+     *
+     * @return l'identifiant du rendez-vous
+     */
     public int getId() { return id; }
 
-    /** @return le patient associé au rendez-vous */
+    /**
+     * Retourne le patient associé au rendez-vous.
+     *
+     * @return le patient associé au rendez-vous
+     */
     public model.Patient getPatient() { return patient; }
 
-    /** @return le spécialiste associé au rendez-vous */
+    /**
+     * Retourne le spécialiste associé au rendez-vous.
+     *
+     * @return le spécialiste associé au rendez-vous
+     */
     public Specialiste getSpecialiste() { return specialiste; }
 
-    /** @return la disponibilité liée au rendez-vous */
+    /**
+     * Retourne la disponibilité liée au rendez-vous.
+     *
+     * @return la disponibilité liée au rendez-vous
+     */
     public model.Disponibilite getDisponibilite() { return disponibilite; }
 
-    /** @return le statut du rendez-vous */
+    /**
+     * Retourne le statut du rendez-vous.
+     *
+     * @return le statut du rendez-vous
+     */
     public String getStatut() { return statut; }
 
-    /** @return les notes du rendez-vous */
+    /**
+     * Retourne les notes du rendez-vous.
+     *
+     * @return les notes du rendez-vous
+     */
     public String getNotes() { return notes; }
 
-
-    /** @param id définit l'identifiant du rendez-vous */
+    /**
+     * Définit l'identifiant du rendez-vous.
+     *
+     * @param id l'identifiant du rendez-vous
+     */
     public void setId(int id) { this.id = id; }
 
-    /** @param patient définit le patient associé au rendez-vous */
+    /**
+     * Définit le patient associé au rendez-vous.
+     *
+     * @param patient le patient associé au rendez-vous
+     */
     public void setPatient(model.Patient patient) { this.patient = patient; }
 
-    /** @param specialiste définit le spécialiste associé au rendez-vous */
+    /**
+     * Définit le spécialiste associé au rendez-vous.
+     *
+     * @param specialiste le spécialiste associé au rendez-vous
+     */
     public void setSpecialiste(Specialiste specialiste) { this.specialiste = specialiste; }
 
-    /** @param disponibilite définit la disponibilité du rendez-vous */
+    /**
+     * Définit la disponibilité du rendez-vous.
+     *
+     * @param disponibilite la disponibilité du rendez-vous
+     */
     public void setDisponibilite(model.Disponibilite disponibilite) { this.disponibilite = disponibilite; }
 
-    /** @param statut définit le statut du rendez-vous */
+    /**
+     * Définit le statut du rendez-vous.
+     *
+     * @param statut le statut du rendez-vous
+     */
     public void setStatut(String statut) { this.statut = statut; }
 
-    /** @param notes définit les notes du rendez-vous */
+    /**
+     * Définit les notes du rendez-vous.
+     *
+     * @param notes les notes du rendez-vous
+     */
     public void setNotes(String notes) { this.notes = notes; }
+
 }

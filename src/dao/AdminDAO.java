@@ -16,6 +16,15 @@ import static util.exceptionsConstantes.ERREUR_DAO_ADMIN;
  */
 public class AdminDAO implements DAO<Admin> {
 
+
+    /**
+     * Constructeur par défaut.
+     * Initialise le DAO sans configuration particulière.
+     */
+    public AdminDAO() {
+        // Rien de spécifique à initialiser
+    }
+
     /**
      * Récupère un administrateur par son identifiant.
      *
