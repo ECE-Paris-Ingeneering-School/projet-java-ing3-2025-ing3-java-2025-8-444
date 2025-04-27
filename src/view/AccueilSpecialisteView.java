@@ -1,5 +1,6 @@
 package view;
 
+import controller.Mail;
 import dao.DisponibiliteDAO;
 import dao.RendezVousDAO;
 import exceptions.DaoOperationException;
@@ -7,14 +8,17 @@ import model.Disponibilite;
 import model.RendezVous;
 import model.Utilisateur;
 import model.Specialiste;
+import controller.Mail;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AccueilSpecialisteView extends JFrame {
 
     private Utilisateur user;
+    private List<RendezVous> mesRendezVous;
 
     public AccueilSpecialisteView(Utilisateur user) {
         this.user = user;
@@ -48,13 +52,6 @@ public class AccueilSpecialisteView extends JFrame {
         JPanel rightButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         rightButtons.setOpaque(false);
 
-        JButton accueilButton = new JButton("Accueil");
-        accueilButton.setBackground(Color.WHITE);
-        accueilButton.addActionListener(e -> {
-            dispose();
-            new AccueilSpecialisteView(user);
-        });
-
         JButton logoutButton = new JButton("Déconnexion");
         logoutButton.setBackground(Color.WHITE);
         logoutButton.addActionListener(e -> {
@@ -62,7 +59,6 @@ public class AccueilSpecialisteView extends JFrame {
             new ConnexionView();
         });
 
-        rightButtons.add(accueilButton);
         rightButtons.add(logoutButton);
 
         header.add(logo, BorderLayout.WEST);
@@ -82,7 +78,6 @@ public class AccueilSpecialisteView extends JFrame {
         content.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         content.setPreferredSize(new Dimension(800, 500));
 
-        // Titre
         JLabel title = new JLabel("Votre planning :");
         title.setFont(new Font("SansSerif", Font.BOLD, 20));
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -118,7 +113,6 @@ public class AccueilSpecialisteView extends JFrame {
         dispoList.setFont(new Font("SansSerif", Font.PLAIN, 14));
         JScrollPane scrollDispos = new JScrollPane(dispoList);
 
-        // Bouton ajouter une dispo
         JButton addAvailability = new JButton("➕ Ajouter une disponibilité");
         addAvailability.setBackground(new Color(52, 152, 219));
         addAvailability.setForeground(Color.WHITE);
@@ -127,20 +121,14 @@ public class AccueilSpecialisteView extends JFrame {
         addAvailability.setFont(new Font("SansSerif", Font.BOLD, 14));
         addAvailability.addActionListener(e -> new AjoutDisponibiliteView((Specialiste) user));
 
-        // --- Rendez-vous à venir ---
-        JLabel rdvLabel = new JLabel("Vos rendez-vous à venir :");
+        // --- Rendez-vous ---
+        JLabel rdvLabel = new JLabel("Vos rendez-vous :");
         rdvLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
         rdvLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         DefaultListModel<String> modelRDV = new DefaultListModel<>();
         RendezVousDAO rdvDAO = new RendezVousDAO();
-        List<RendezVous> rdvs;
-        try {
-            rdvs = rdvDAO.getAll();
-        } catch (DaoOperationException e) {
-            JOptionPane.showMessageDialog(this, "Erreur lors du chargement de vos rendez-vous : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
-            rdvs = List.of();
-        }
+        List<RendezVous> rdvs = rdvDAO.getAll(); // on filtre ensuite dans le for
 
         boolean hasRdv = false;
         for (RendezVous r : rdvs) {
@@ -149,33 +137,72 @@ public class AccueilSpecialisteView extends JFrame {
                         r.getDisponibilite().getDate() + " à " + r.getDisponibilite().getHeureDebut() +
                                 " - Patient: " + r.getPatient().getNom() + " (" + r.getStatut() + ")"
                 );
+                mesRendezVous.add(r);
                 hasRdv = true;
             }
         }
 
         if (!hasRdv) {
-            modelRDV.addElement("Aucun rendez-vous à venir.");
+            modelRDV.addElement("Aucun rendez-vous pour l'instant.");
         }
 
         JList<String> rdvList = new JList<>(modelRDV);
         rdvList.setFont(new Font("SansSerif", Font.PLAIN, 14));
         JScrollPane scrollRDV = new JScrollPane(rdvList);
 
+        // Bouton d'action
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        buttonPanel.setOpaque(false);
+
+        JButton refuserButton = new JButton("Supprimer");
+        refuserButton.setBackground(new Color(231, 76, 60));
+        refuserButton.setForeground(Color.WHITE);
+        refuserButton.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        refuserButton.setPreferredSize(new Dimension(160, 30));
+        refuserButton.setFocusPainted(false);
+
+        refuserButton.addActionListener(e -> {
+            int selectedIndex = rdvList.getSelectedIndex();
+            if (selectedIndex != -1 && selectedIndex < mesRendezVous.size()) {
+                RendezVous rdv = mesRendezVous.get(selectedIndex);
+                int confirm = JOptionPane.showConfirmDialog(
+                        this,
+                        "Êtes-vous sûr de vouloir supprimer ce rendez-vous ?",
+                        "Confirmation",
+                        JOptionPane.YES_NO_OPTION
+                );
+                if (confirm == JOptionPane.YES_OPTION) {
+                    // Envoyer les emails avant suppression
+                    Mail mailer = new Mail();
+                    mailer.envoimail(rdv.getPatient(), "Bonjour " + rdv.getPatient().getPrenom() + ",\nVotre rendez-vous Doc'n'Roll avec Dr " + rdv.getSpecialiste().getNom() + " a été annulé.");
+                    mailer.envoimail(rdv.getSpecialiste(), "Bonjour Dr " + rdv.getSpecialiste().getNom() + ",\nVous avez annulé un rendez-vous avec " + rdv.getPatient().getPrenom() + " " + rdv.getPatient().getNom() + ".");
+
+                    new RendezVousDAO().delete(rdv);
+                    JOptionPane.showMessageDialog(this, "Rendez-vous supprimé et mail envoyé.");
+                    dispose();
+                    new AccueilSpecialisteView(user);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner un rendez-vous.");
+            }
+        });
+
         // Assemblage final
         content.add(title);
         content.add(Box.createVerticalStrut(20));
-
         content.add(dispoLabel);
         content.add(Box.createVerticalStrut(10));
         content.add(scrollDispos);
         content.add(Box.createVerticalStrut(10));
         content.add(addAvailability);
-
         content.add(Box.createVerticalStrut(30));
-
         content.add(rdvLabel);
         content.add(Box.createVerticalStrut(10));
         content.add(scrollRDV);
+        content.add(Box.createVerticalStrut(10));
+        content.add(buttonPanel);
+        buttonPanel.add(refuserButton);
 
         wrapper.add(content);
         return wrapper;
