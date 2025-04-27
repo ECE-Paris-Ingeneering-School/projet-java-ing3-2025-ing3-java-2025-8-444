@@ -2,6 +2,7 @@ package view;
 
 import controller.PatientController;
 import model.Patient;
+import controller.mail;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +14,7 @@ public class InscriptionView extends JFrame {
     private JTextField emailField;
     private JPasswordField passwordField;
     private PatientController controller;
+    private mail mail;
 
     public InscriptionView() {
         controller = new PatientController();
@@ -21,6 +23,8 @@ public class InscriptionView extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
+
+        this.mail = new mail();
 
         add(createHeaderPanel(), BorderLayout.NORTH);
         add(createMainPanel(), BorderLayout.CENTER);
@@ -130,6 +134,7 @@ public class InscriptionView extends JFrame {
             dispose();
             Patient newPatient = controller.getPatientByEmail(email);
             new AccueilPatientView(newPatient);
+            mail.envoimail(newPatient, "Bienvenue sur Doc N Roll " + prenom + " !\nL'équipe Doc N Roll ");
         } else {
             JOptionPane.showMessageDialog(this, "Erreur : Email déjà utilisé ou problème d'inscription.", "Erreur", JOptionPane.ERROR_MESSAGE);
         }

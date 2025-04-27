@@ -2,6 +2,8 @@
   <library name="mysql-connector-j-9.2.0">
     <CLASSES>
       <root url="jar://$USER_HOME$/Documents/mysql-connector-j-9.2.0/mysql-connector-j-9.2.0/mysql-connector-j-9.2.0.jar!/" />
+      <root url="jar://$USER_HOME$/Documents/javax.activation-1.2.0.jar!/" />
+      <root url="jar://$USER_HOME$/Documents/javax.mail.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
