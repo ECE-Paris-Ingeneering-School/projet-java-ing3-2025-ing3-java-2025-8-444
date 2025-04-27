@@ -10,8 +10,19 @@ import java.util.List;
 
 import static util.exceptionsConstantes.ERREUR_DAO_PATIENT;
 
+/**
+ * DAO (Data Access Object) pour la gestion des patients dans la base de données.
+ * Implémente les opérations CRUD pour les objets {@link Patient}.
+ */
 public class PatientDAO implements DAO<Patient> {
 
+    /**
+     * Récupère un patient par son identifiant.
+     *
+     * @param id L'identifiant du patient.
+     * @return L'objet {@link Patient} correspondant ou {@code null} s'il n'existe pas.
+     * @throws DaoOperationException En cas d'erreur d'accès à la base de données.
+     */
     @Override
     public Patient get(int id) {
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -35,6 +46,12 @@ public class PatientDAO implements DAO<Patient> {
         return null;
     }
 
+    /**
+     * Récupère tous les patients de la base de données.
+     *
+     * @return Une liste de tous les objets {@link Patient}.
+     * @throws DaoOperationException En cas d'erreur d'accès à la base de données.
+     */
     @Override
     public List<Patient> getAll() {
         List<Patient> patients = new ArrayList<>();
@@ -58,6 +75,13 @@ public class PatientDAO implements DAO<Patient> {
         return patients;
     }
 
+    /**
+     * Sauvegarde un nouveau patient dans la base de données.
+     *
+     * @param patient Le patient à sauvegarder.
+     * @return {@code true} si l'enregistrement a réussi, {@code false} sinon.
+     * @throws DaoOperationException En cas d'erreur d'accès à la base de données.
+     */
     @Override
     public boolean save(Patient patient) {
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -92,6 +116,13 @@ public class PatientDAO implements DAO<Patient> {
         return false;
     }
 
+    /**
+     * Met à jour un patient existant dans la base de données.
+     *
+     * @param patient Le patient avec les informations mises à jour.
+     * @return {@code true} si la mise à jour a réussi, {@code false} sinon.
+     * @throws DaoOperationException En cas d'erreur d'accès à la base de données.
+     */
     @Override
     public boolean update(Patient patient) {
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -108,6 +139,13 @@ public class PatientDAO implements DAO<Patient> {
         }
     }
 
+    /**
+     * Supprime un patient existant de la base de données.
+     *
+     * @param patient Le patient à supprimer.
+     * @return {@code true} si la suppression a réussi, {@code false} sinon.
+     * @throws DaoOperationException En cas d'erreur d'accès à la base de données.
+     */
     @Override
     public boolean delete(Patient patient) {
         try (Connection conn = DatabaseConnection.getConnection()) {

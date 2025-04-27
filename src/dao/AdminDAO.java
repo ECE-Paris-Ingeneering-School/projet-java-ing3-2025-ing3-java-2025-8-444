@@ -10,7 +10,19 @@ import java.util.List;
 
 import static util.exceptionsConstantes.ERREUR_DAO_ADMIN;
 
+/**
+ * DAO (Data Access Object) pour la gestion des administrateurs dans la base de données.
+ * Implémente les opérations CRUD pour les objets {@link Admin}.
+ */
 public class AdminDAO implements DAO<Admin> {
+
+    /**
+     * Récupère un administrateur par son identifiant.
+     *
+     * @param id L'identifiant de l'administrateur.
+     * @return L'objet {@link Admin} correspondant, ou {@code null} s'il n'existe pas.
+     * @throws DaoOperationException En cas d'erreur lors de l'accès à la base de données.
+     */
     @Override
     public Admin get(int id) {
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -34,6 +46,12 @@ public class AdminDAO implements DAO<Admin> {
         }
     }
 
+    /**
+     * Récupère tous les administrateurs de la base de données.
+     *
+     * @return Une liste de tous les objets {@link Admin}.
+     * @throws DaoOperationException En cas d'erreur lors de l'accès à la base de données.
+     */
     @Override
     public List<Admin> getAll() {
         List<Admin> admins = new ArrayList<>();
@@ -57,6 +75,13 @@ public class AdminDAO implements DAO<Admin> {
         }
     }
 
+    /**
+     * Enregistre un nouvel administrateur dans la base de données.
+     *
+     * @param admin L'administrateur à enregistrer.
+     * @return {@code true} si l'enregistrement a réussi, {@code false} sinon.
+     * @throws DaoOperationException En cas d'erreur lors de l'accès à la base de données.
+     */
     @Override
     public boolean save(Admin admin) {
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -91,6 +116,13 @@ public class AdminDAO implements DAO<Admin> {
         }
     }
 
+    /**
+     * Met à jour les informations d'un administrateur existant.
+     *
+     * @param admin L'administrateur avec les nouvelles informations.
+     * @return {@code true} si la mise à jour a réussi, {@code false} sinon.
+     * @throws DaoOperationException En cas d'erreur lors de l'accès à la base de données.
+     */
     @Override
     public boolean update(Admin admin) {
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -107,6 +139,13 @@ public class AdminDAO implements DAO<Admin> {
         }
     }
 
+    /**
+     * Supprime un administrateur de la base de données.
+     *
+     * @param admin L'administrateur à supprimer.
+     * @return {@code true} si la suppression a réussi, {@code false} sinon.
+     * @throws DaoOperationException En cas d'erreur lors de l'accès à la base de données.
+     */
     @Override
     public boolean delete(Admin admin) {
         try (Connection conn = DatabaseConnection.getConnection()) {

@@ -10,8 +10,19 @@ import java.util.List;
 
 import static util.exceptionsConstantes.ERREUR_DAO_LIEU;
 
+/**
+ * DAO (Data Access Object) pour la gestion des lieux dans la base de données.
+ * Implémente les opérations CRUD pour les objets {@link Lieu}.
+ */
 public class LieuDAO implements DAO<Lieu> {
 
+    /**
+     * Récupère un lieu par son identifiant.
+     *
+     * @param id L'identifiant du lieu.
+     * @return L'objet {@link Lieu} correspondant ou {@code null} s'il n'existe pas.
+     * @throws DaoOperationException En cas d'erreur d'accès à la base de données.
+     */
     @Override
     public Lieu get(int id) {
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -33,6 +44,12 @@ public class LieuDAO implements DAO<Lieu> {
         return null;
     }
 
+    /**
+     * Récupère tous les lieux de la base de données.
+     *
+     * @return Une liste de tous les objets {@link Lieu}.
+     * @throws DaoOperationException En cas d'erreur d'accès à la base de données.
+     */
     @Override
     public List<Lieu> getAll() {
         List<Lieu> list = new ArrayList<>();
@@ -54,6 +71,13 @@ public class LieuDAO implements DAO<Lieu> {
         return list;
     }
 
+    /**
+     * Sauvegarde un nouveau lieu dans la base de données.
+     *
+     * @param l Le lieu à sauvegarder.
+     * @return {@code true} si l'insertion a réussi, {@code false} sinon.
+     * @throws DaoOperationException En cas d'erreur d'accès à la base de données.
+     */
     @Override
     public boolean save(Lieu l) {
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -68,6 +92,13 @@ public class LieuDAO implements DAO<Lieu> {
         }
     }
 
+    /**
+     * Met à jour un lieu existant dans la base de données.
+     *
+     * @param l Le lieu avec les nouvelles informations.
+     * @return {@code true} si la mise à jour a réussi, {@code false} sinon.
+     * @throws DaoOperationException En cas d'erreur d'accès à la base de données.
+     */
     @Override
     public boolean update(Lieu l) {
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -83,6 +114,13 @@ public class LieuDAO implements DAO<Lieu> {
         }
     }
 
+    /**
+     * Supprime un lieu existant de la base de données.
+     *
+     * @param l Le lieu à supprimer.
+     * @return {@code true} si la suppression a réussi, {@code false} sinon.
+     * @throws DaoOperationException En cas d'erreur d'accès à la base de données.
+     */
     @Override
     public boolean delete(Lieu l) {
         try (Connection conn = DatabaseConnection.getConnection()) {

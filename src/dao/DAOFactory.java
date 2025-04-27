@@ -10,6 +10,10 @@ import java.sql.SQLException;
 import static util.exceptionsConstantes.ERREUR_CONNEXION_BDD;
 import static util.exceptionsConstantes.ERREUR_CREATION_DAO;
 
+/**
+ * Fabrique de DAO (Data Access Object).
+ * Fournit des instances de différentes classes DAO tout en gérant la connexion à la base de données.
+ */
 public class DAOFactory {
     private static Connection connection;
 
@@ -21,12 +25,23 @@ public class DAOFactory {
         }
     }
 
+    /**
+     * Vérifie si la connexion est valide, sinon tente de la rétablir.
+     *
+     * @throws SQLException si une erreur survient lors de la vérification ou la récupération de la connexion.
+     */
     private static void checkConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             connection = DatabaseConnection.getConnection();
         }
     }
 
+    /**
+     * Retourne une instance de {@link UtilisateurDAO}.
+     *
+     * @return une instance de {@link UtilisateurDAO}.
+     * @throws DaoCreationException si une erreur se produit lors de la création.
+     */
     public static UtilisateurDAO getUtilisateurDAO() {
         try {
             checkConnection();
@@ -36,6 +51,12 @@ public class DAOFactory {
         }
     }
 
+    /**
+     * Retourne une instance de {@link PatientDAO}.
+     *
+     * @return une instance de {@link PatientDAO}.
+     * @throws DaoCreationException si une erreur se produit lors de la création.
+     */
     public static PatientDAO getPatientDAO() {
         try {
             checkConnection();
@@ -45,6 +66,12 @@ public class DAOFactory {
         }
     }
 
+    /**
+     * Retourne une instance de {@link AdminDAO}.
+     *
+     * @return une instance de {@link AdminDAO}.
+     * @throws DaoCreationException si une erreur se produit lors de la création.
+     */
     public static AdminDAO getAdminDAO() {
         try {
             checkConnection();
@@ -54,7 +81,12 @@ public class DAOFactory {
         }
     }
 
-
+    /**
+     * Retourne une instance de {@link SpecialisteDAO}.
+     *
+     * @return une instance de {@link SpecialisteDAO}.
+     * @throws DaoCreationException si une erreur se produit lors de la création.
+     */
     public static SpecialisteDAO getSpecialisteDAO() {
         try {
             checkConnection();
@@ -64,7 +96,12 @@ public class DAOFactory {
         }
     }
 
-
+    /**
+     * Retourne une instance de {@link LieuDAO}.
+     *
+     * @return une instance de {@link LieuDAO}.
+     * @throws DaoCreationException si une erreur se produit lors de la création.
+     */
     public static LieuDAO getLieuDAO() {
         try {
             checkConnection();
@@ -74,6 +111,12 @@ public class DAOFactory {
         }
     }
 
+    /**
+     * Retourne une instance de {@link SpecialiteDAO}.
+     *
+     * @return une instance de {@link SpecialiteDAO}.
+     * @throws DaoCreationException si une erreur se produit lors de la création.
+     */
     public static SpecialiteDAO getSpecialiteDAO() {
         try {
             checkConnection();
@@ -83,6 +126,12 @@ public class DAOFactory {
         }
     }
 
+    /**
+     * Retourne une instance de {@link DisponibiliteDAO}.
+     *
+     * @return une instance de {@link DisponibiliteDAO}.
+     * @throws DaoCreationException si une erreur se produit lors de la création.
+     */
     public static DisponibiliteDAO getDisponibiliteDAO() {
         try {
             checkConnection();
@@ -92,6 +141,12 @@ public class DAOFactory {
         }
     }
 
+    /**
+     * Retourne une instance de {@link RendezVousDAO}.
+     *
+     * @return une instance de {@link RendezVousDAO}.
+     * @throws DaoCreationException si une erreur se produit lors de la création.
+     */
     public static RendezVousDAO getRendezVousDAO() {
         try {
             checkConnection();
