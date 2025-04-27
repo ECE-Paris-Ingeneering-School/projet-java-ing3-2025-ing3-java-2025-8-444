@@ -96,6 +96,11 @@ public class UtilisateurDAO implements DAO<Utilisateur> {
         throw new UnsupportedOperationException("Utiliser un DAO spécifique (Patient, Admin, etc.)");
     }
 
+    /**
+     * Compte le nombre total d'utilisateurs enregistrés dans la base de données.
+     *
+     * @return Le nombre total d'utilisateurs.
+     */
     public int countUtilisateur() {
         int count = 0;
 
