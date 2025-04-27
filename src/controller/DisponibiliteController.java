@@ -17,15 +17,26 @@ import java.util.List;
 import static util.exceptionsConstantes.DISPONIBILITE_EXISTANTE;
 import static util.exceptionsConstantes.ERREUR_SAUVEGARDE_DISPONIBILITE;
 
+/**
+ * Contrôleur pour gérer les disponibilités des spécialistes.
+ */
 public class DisponibiliteController {
     private final LieuDAO lieuDAO;
     private final DisponibiliteDAO disponibiliteDAO;
 
+    /**
+     * Constructeur initialisant les DAO nécessaires.
+     */
     public DisponibiliteController() {
         this.lieuDAO = DAOFactory.getLieuDAO();
         this.disponibiliteDAO = DAOFactory.getDisponibiliteDAO();
     }
 
+    /**
+     * Retourne la liste complète des lieux disponibles.
+     *
+     * @return la liste des lieux, ou une liste vide en cas d'erreur.
+     */
     public List<Lieu> getTousLieux() {
         try {
             return lieuDAO.getAll();
@@ -35,6 +46,16 @@ public class DisponibiliteController {
         }
     }
 
+    /**
+     * Ajoute une disponibilité pour un spécialiste à une date, heure et lieu donnés.
+     *
+     * @param specialiste Le spécialiste concerné.
+     * @param date La date de la disponibilité.
+     * @param debut L'heure de début.
+     * @param fin L'heure de fin.
+     * @param lieu Le lieu de la disponibilité.
+     * @return true si l'ajout réussit, false sinon.
+     */
     public boolean ajouterDisponibilite(Specialiste specialiste, LocalDate date, LocalTime debut, LocalTime fin, Lieu lieu) {
         try {
             List<Disponibilite> existantes = disponibiliteDAO.getAllForSpecialiste(specialiste.getId());

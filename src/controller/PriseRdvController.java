@@ -13,17 +13,28 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+/**
+ * Contrôleur pour gérer la prise de rendez-vous.
+ */
 public class PriseRdvController {
     private DisponibiliteDAO disponibiliteDAO;
     private RendezVousDAO rendezVousDAO;
     private Mail mail;
 
+    /**
+     * Constructeur initialisant les DAO et l'objet mail.
+     */
     public PriseRdvController() {
         this.disponibiliteDAO = DAOFactory.getDisponibiliteDAO();
         this.rendezVousDAO = DAOFactory.getRendezVousDAO();
         this.mail = new Mail();
     }
 
+    /**
+     * Récupère toutes les spécialités disponibles.
+     *
+     * @return Liste des noms de spécialités.
+     */
     public List<String> getToutesLesSpecialites() {
         try {
             return DAOFactory.getSpecialiteDAO().getAll().stream()
@@ -35,6 +46,12 @@ public class PriseRdvController {
         }
     }
 
+    /**
+     * Récupère les disponibilités filtrées par spécialité.
+     *
+     * @param specialiteNom Le nom de la spécialité.
+     * @return Liste des disponibilités correspondantes.
+     */
     public List<Disponibilite> getDisponibilitesParSpecialite(String specialiteNom) {
         try {
             return disponibiliteDAO.getAll().stream()
@@ -47,6 +64,13 @@ public class PriseRdvController {
         }
     }
 
+    /**
+     * Réserve une disponibilité pour un patient et envoie un mail de confirmation.
+     *
+     * @param patient L'utilisateur patient.
+     * @param dispo La disponibilité à réserver.
+     * @return true si la réservation est réussie, false sinon.
+     */
     public boolean reserverDispo(Utilisateur patient, Disponibilite dispo) {
         if (!(patient instanceof Patient)) return false;
 
@@ -70,6 +94,12 @@ public class PriseRdvController {
         return false;
     }
 
+    /**
+     * Recherche des disponibilités selon un critère donné.
+     *
+     * @param critere Mot-clé pour la recherche (nom, spécialité, lieu, etc.).
+     * @return Liste des disponibilités trouvées.
+     */
     public List<Disponibilite> rechercherDisponibilites(String critere) {
         try {
             String keyword = critere.toLowerCase(Locale.ROOT);
@@ -88,6 +118,12 @@ public class PriseRdvController {
         }
     }
 
+    /**
+     * Affiche les résultats de la recherche de disponibilités.
+     *
+     * @param critere Le critère de recherche.
+     * @param user L'utilisateur effectuant la recherche.
+     */
     public void afficherResultats(String critere, Utilisateur user) {
         List<Disponibilite> resultats = rechercherDisponibilites(critere);
         if (resultats.isEmpty()) {

@@ -6,13 +6,21 @@ import exceptions.EnvoiMailException;
 import javax.mail.*;
 import javax.mail.internet.*;
 import java.util.Properties;
-import javax.activation.*;
 
 import static util.exceptionsConstantes.ERREUR_ENVOI_MAIL;
 
+/**
+ * Classe pour gérer l'envoi de mails aux utilisateurs.
+ */
 public class Mail {
     public Mail mail;
 
+    /**
+     * Envoie un email à un utilisateur donné avec le contenu spécifié.
+     *
+     * @param user Utilisateur destinataire du mail.
+     * @param mail Contenu du mail à envoyer.
+     */
     public void envoimail(Utilisateur user, String mail) {
         final String username = "9db28b37dcafa5";
         final String password = "85a2214c2581cc";
@@ -23,7 +31,7 @@ public class Mail {
         props.put("mail.smtp.host", "sandbox.smtp.mailtrap.io");
         props.put("mail.smtp.port", "587");
 
-        javax.mail.Session session = javax.mail.Session.getInstance(props, new Authenticator() {
+        Session session = Session.getInstance(props, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
             }

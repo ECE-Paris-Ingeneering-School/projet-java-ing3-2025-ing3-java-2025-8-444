@@ -7,24 +7,36 @@ import model.*;
 
 import static util.exceptionsConstantes.UTILISATEUR_NON_TROUVE;
 
+/**
+ * Contrôleur gérant la connexion des utilisateurs.
+ */
 public class ConnexionController {
+
+    /**
+     * Connecte un utilisateur selon son email et son mot de passe.
+     * Cherche parmi les patients, administrateurs et spécialistes.
+     *
+     * @param email L'email de l'utilisateur.
+     * @param motDePasse Le mot de passe de l'utilisateur.
+     * @return L'utilisateur correspondant si trouvé, sinon null.
+     */
     public Utilisateur seConnecter(String email, String motDePasse) {
         try {
-            // Test Patient
+            // Vérification des patients
             for (Patient p : DAOFactory.getPatientDAO().getAll()) {
                 if (p.getEmail().equalsIgnoreCase(email) && p.getMotDePasse().equals(motDePasse)) {
                     return p;
                 }
             }
 
-            // Test Admin
+            // Vérification des administrateurs
             for (Admin a : DAOFactory.getAdminDAO().getAll()) {
                 if (a.getEmail().equalsIgnoreCase(email) && a.getMotDePasse().equals(motDePasse)) {
                     return a;
                 }
             }
 
-            // Test Specialiste
+            // Vérification des spécialistes
             for (Specialiste s : DAOFactory.getSpecialisteDAO().getAll()) {
                 if (s.getEmail().equalsIgnoreCase(email) && s.getMotDePasse().equals(motDePasse)) {
                     return s;
