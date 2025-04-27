@@ -13,12 +13,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Map;
 
+/**
+ * Page de présentation des statistiques
+ * uniquement accessible par l'admin
+ */
 public class StatistiquesView extends JFrame {
     private UtilisateurDAO utilisateurDAO;
     private SpecialisteDAO specialisteDAO;
     private RendezVousDAO rendezVousDAO;
     private Utilisateur utilisateur;
 
+    /**
+     * Composée d'un header et d'un main panel
+     * @param utilisateur
+     */
     public StatistiquesView(Utilisateur utilisateur) {
         this.utilisateur = utilisateur;
         setTitle("Doc'n'Roll - Statistiques");
@@ -38,6 +46,11 @@ public class StatistiquesView extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Header, bleu
+     * Logo à gauche et bouton retour à droite pour revenir à la page d'accueil admin
+     * @return header
+     */
     private JPanel createHeader() {
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(new Color(52, 152, 219));
@@ -59,7 +72,12 @@ public class StatistiquesView extends JFrame {
 
         return header;
     }
-
+    /**
+     * Main panel, blanc
+     * Affichage de différentes informations sur la plateformes
+     * Nombre de rendez vous, nombre de spécialistes, nombre d'utilisateurs, et graphique en camembert de la
+     * répartition des spécialistes par spécialités
+     */
     private JPanel createMainPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());

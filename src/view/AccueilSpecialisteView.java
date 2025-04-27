@@ -15,11 +15,19 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Page d'accueil lorsqu'on se connecte en tant que spécialiste
+ */
 public class AccueilSpecialisteView extends JFrame {
 
     private Utilisateur user;
     private List<RendezVous> mesRendezVous;
 
+    /**
+     * La page prend l'utilisateur en parametre
+     * un header et un main panel
+     * @param user
+     */
     public AccueilSpecialisteView(Utilisateur user) {
         this.user = user;
         setTitle("Espace Spécialiste - Dr " + user.getNom());
@@ -35,6 +43,11 @@ public class AccueilSpecialisteView extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Header, bleu, logo à gauche, message de bienvenu au milieu et bouton de déconnexion à droite
+     * (pas besoin de retourner à l'accueil pour le spécialiste)
+     * @return header
+     */
     private JPanel createHeader() {
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(new Color(52, 152, 219));
@@ -68,6 +81,13 @@ public class AccueilSpecialisteView extends JFrame {
         return header;
     }
 
+    /**
+     * Main panel, blanc, liste du planning du spécialiste avec ses rendez vous à venir
+     * liste des disponibilités qu'il a renseigné
+     * Bouton supprimer un rendez vous à venir
+     * Bouton ajouter une disponibilité qui mène vers nouvelle page et supprimer une dispo
+     * @return main
+     */
     private JPanel createMainPanel() {
         JPanel wrapper = new JPanel(new GridBagLayout());
         wrapper.setBackground(new Color(245, 245, 245));

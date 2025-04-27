@@ -16,6 +16,10 @@ import java.util.List;
 
 import static util.exceptionsConstantes.*;
 
+/**
+ * Page de gestion des utilisateurs
+ * Uniquement accessible par l'admin
+ */
 public class GestionUtilisateursAdminView extends JFrame {
 
     private final DefaultListModel<Utilisateur> userModel;
@@ -24,6 +28,9 @@ public class GestionUtilisateursAdminView extends JFrame {
     private final AdminDAO adminDAO = new AdminDAO();
     private final SpecialisteDAO specialisteDAO = new SpecialisteDAO();
 
+    /**
+     * Page composée de la liste des utilisateurs et d'un panel de boutons pour les gérer
+     */
     public GestionUtilisateursAdminView() {
         userModel = new DefaultListModel<>();
         userList = new JList<>(userModel);
@@ -41,6 +48,10 @@ public class GestionUtilisateursAdminView extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Programme pour charger les utilisateurs
+     * fait appel à PatientDAO, AdminDAO, SpecialisteDAO et les ajoute dans la liste
+     */
     private void chargerUtilisateurs() {
         userModel.clear();
         try {
@@ -54,6 +65,13 @@ public class GestionUtilisateursAdminView extends JFrame {
         }
     }
 
+    /**
+     * Panel de boutons
+     * Modifier pour modifier les infos de l'utilisateur
+     * Supprimer pour supprimer l'utilisateur de la bdd
+     * Fermer pour fermer la page
+     * @return bouton
+     */
     private JPanel createButtonPanel() {
         JPanel panel = new JPanel();
 
@@ -73,6 +91,10 @@ public class GestionUtilisateursAdminView extends JFrame {
         return panel;
     }
 
+    /**
+     * Programme pour modifier les Utilisateurs
+     * Affiche les informations de l'utilisateurs dans des champs modifiables
+     */
     private void modifierUtilisateur() {
         Utilisateur u = userList.getSelectedValue();
         if (u == null) return;
@@ -105,6 +127,10 @@ public class GestionUtilisateursAdminView extends JFrame {
         }
     }
 
+    /**
+     * Programme pour supprimer un utilisateur
+     * Supprime l'utilisateur sélectionné
+     */
     private void supprimerUtilisateur() {
         Utilisateur u = userList.getSelectedValue();
         if (u == null) return;

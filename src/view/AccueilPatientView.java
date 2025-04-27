@@ -11,10 +11,17 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Page d'accueil lorsqu'on se connecte en tant que patient
+ */
 public class AccueilPatientView extends JFrame {
 
     private Utilisateur user;
 
+    /**
+     * Header et main panel
+     * @param user
+     */
     public AccueilPatientView(Utilisateur user) {
         this.user = user;
         setTitle("Espace Patient - Bienvenue " + user.getPrenom());
@@ -30,6 +37,10 @@ public class AccueilPatientView extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Header bleu, logo à gauche, message de bienvenu au milieu et bouton accueil et déconnexion à droite
+     * @return header
+     */
     private JPanel createHeader() {
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(new Color(52, 152, 219));
@@ -71,6 +82,12 @@ public class AccueilPatientView extends JFrame {
         return header;
     }
 
+    /**
+     * Main panel, blanc, liste des rendez vous à venir du patient
+     * Boutons annuler un rendez vous et Prendre un nouveau rendez vous qui renvoie vers une page
+     * de réservation
+     * @return main
+     */
     private JPanel createMainPanel() {
         JPanel wrapper = new JPanel(new GridBagLayout());
         wrapper.setBackground(new Color(245, 245, 245));

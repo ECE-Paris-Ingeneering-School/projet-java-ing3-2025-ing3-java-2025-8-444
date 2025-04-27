@@ -13,6 +13,9 @@ import java.util.List;
 
 import static util.exceptionsConstantes.SPECIALITE_NON_SELECTIONNEE;
 
+/**
+ * Page pour ajouter un spécialiste, uniquement accessible par l'admin
+ */
 public class AjoutSpecialisteView extends JFrame {
     private JTextField nomField;
     private JTextField prenomField;
@@ -22,6 +25,9 @@ public class AjoutSpecialisteView extends JFrame {
     private JComboBox<String> specialiteCombo;
     private AdminController controller;
 
+    /**
+     * Form à remplir avec les infos du spécialiste et bouton de confirmation
+     */
     public AjoutSpecialisteView() {
         controller = new AdminController();
 
@@ -37,6 +43,11 @@ public class AjoutSpecialisteView extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Form à remplir avec les infos d'un nouveau spécialiste :
+     * Nom, Prénom, Mail, Mot de passe, Qualification, Spécialité
+     * @return form
+     */
     private JPanel createFormPanel() {
         JPanel panel = new JPanel(new GridLayout(6, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -71,6 +82,10 @@ public class AjoutSpecialisteView extends JFrame {
         return panel;
     }
 
+    /**
+     * Bouton de confirmation pour envoyer au programme suivant
+     * @return bouton
+     */
     private JPanel createButtonPanel() {
         JPanel panel = new JPanel();
         JButton ajouterButton = new JButton("Ajouter");
@@ -79,6 +94,10 @@ public class AjoutSpecialisteView extends JFrame {
         return panel;
     }
 
+    /**
+     * Programme pour ajouter le nouveau spécialiste, envoie les infos du spécialiste
+     * au controller AdminController
+     */
     private void handleAjout() {
         try {
             String nom = nomField.getText().trim();

@@ -10,17 +10,26 @@ import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
+/**
+ * La classe accueilview sert de page d'accueil lorsqu'on lance l'appli
+ */
 public class AcceuilView extends JFrame {
 
     private JTextField rechercheTexte;
     private PriseRdvController controller = new PriseRdvController();
     private final String placeholder = "Rechercher une spécialité, un médecin, un lieu...";
     private Utilisateur utilisateur;
-
+    /**
+     * Aucun utilisateur n'est connecté au moment où on lance l'appli
+     */
     public AcceuilView() {
         this(null);
     }
 
+    /**Structure de la page d'accueil, titre, taille, composée d'un header, un main panel et un footer
+     *
+     * @param utilisateur
+     */
     public AcceuilView(Utilisateur utilisateur) {
         this.utilisateur = utilisateur;
         setTitle("Doc'n'Roll - Accueil");
@@ -36,6 +45,12 @@ public class AcceuilView extends JFrame {
         setVisible(true);
     }
 
+
+    /**
+     * Header, couleur bleue, le logo à gauche avec le nom de l'appli et le bouton de connexion à droite
+     * qui mène à la page de connexion si personne n'est encore connecté, et à la page mon compte sinon
+     * @return header
+     */
     private JPanel createHeaderPanel() {
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(new Color(52, 152, 219));
@@ -61,7 +76,7 @@ public class AcceuilView extends JFrame {
                         new AccueilSpecialisteView(utilisateur);
                     }
                 }
-                dispose(); // Après avoir réussi l'ouverture
+                dispose();
             } catch (UtilisateurNonTrouveException ex) {
                 JOptionPane.showMessageDialog(this, "Utilisateur non trouvé.");
             } catch (DaoOperationException ex) {
@@ -74,6 +89,11 @@ public class AcceuilView extends JFrame {
         return header;
     }
 
+    /**
+     * Création du panel principal, blanc, slogan, barre de recherche et bouton rechercher qui mène vers
+     * // vers la page de recherche
+     * @return main
+     */
     private JPanel createMainPanel() {
         JPanel main = new JPanel();
         main.setBackground(Color.WHITE);
@@ -124,6 +144,9 @@ public class AcceuilView extends JFrame {
         return main;
     }
 
+    /**
+     * Programme pour lancer la recherche, appel au controller qui affiche le resultat de la recherche
+     */
     private void lancerRecherche() {
         String texte = rechercheTexte.getText().trim();
         if (texte.isEmpty() || texte.equals(placeholder)) {
@@ -140,6 +163,10 @@ public class AcceuilView extends JFrame {
     }
 
 
+    /**
+     * Footer, blanc aussi avec le tag de l'entreprise et les infos pratiques
+     * @return footer
+     */
     private JPanel createFooterPanel() {
         JPanel footer = new JPanel(new GridLayout(1, 3));
         footer.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
