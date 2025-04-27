@@ -1,5 +1,11 @@
 package controller;
 
+/* Sources :
+https://stackoverflow.com/questions/46734922/how-to-structure-controllers-that-communicate-with-databases
+https://openclassrooms.com/fr/courses/7137741-decouplez-votre-architecture-web-pour-des-applications-java-robustes/7184971-extrayez-le-controleur
+https://docs.oracle.com/javase/tutorial/jdbc/basics/index.html
+*/
+
 import dao.DAOFactory;
 import dao.DisponibiliteDAO;
 import dao.RendezVousDAO;
