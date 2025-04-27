@@ -3,6 +3,7 @@ package view;
 import dao.RendezVousDAO;
 import model.RendezVous;
 import model.Utilisateur;
+import controller.Mail;
 
 import javax.swing.*;
 import java.awt.*;
@@ -123,6 +124,27 @@ public class AccueilPatientView extends JFrame {
                 if (confirm == JOptionPane.YES_OPTION) {
                     boolean success = new RendezVousDAO().annuler(rdv);
                     if (success) {
+                        Mail mail = new Mail();
+
+                        String sujetSpecialiste = "Annulation de rendez-vous";
+                        String messageSpecialiste = "Bonjour " + rdv.getSpecialiste().getPrenom() + ",\n\n" +
+                                "Le patient " + user.getPrenom() + " " + user.getNom() +
+                                " a annulé son rendez-vous prévu le " +
+                                rdv.getDisponibilite().getDate() + " à " +
+                                rdv.getDisponibilite().getHeureDebut() + ".\n\n" +
+                                "Merci de votre compréhension.\n\nDoc'n'Roll.";
+
+                        mail.envoimail(rdv.getSpecialiste(), sujetSpecialiste + "\n" + messageSpecialiste);
+
+                        String sujetPatient = "Confirmation d'annulation de rendez-vous";
+                        String messagePatient = "Bonjour " + user.getPrenom() + ",\n\n" +
+                                "Votre rendez-vous avec " + rdv.getSpecialiste().getPrenom() + " " + rdv.getSpecialiste().getNom() +
+                                " prévu le " + rdv.getDisponibilite().getDate() + " à " +
+                                rdv.getDisponibilite().getHeureDebut() + " a bien été annulé.\n\n" +
+                                "À bientôt sur Doc'n'Roll !";
+
+                        mail.envoimail(user, sujetPatient + "\n" + messagePatient);
+
                         JOptionPane.showMessageDialog(this, "Rendez-vous annulé avec succès.");
                         dispose();
                         new AccueilPatientView(user);
