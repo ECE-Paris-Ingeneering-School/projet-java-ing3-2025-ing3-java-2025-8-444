@@ -7,7 +7,9 @@ import util.DatabaseConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static util.exceptionsConstantes.ERREUR_DAO_SPECIALISTE;
 
@@ -137,4 +139,42 @@ public class SpecialisteDAO implements DAO<Specialiste> {
             throw new DaoOperationException(ERREUR_DAO_SPECIALISTE, e);
         }
     }
+    public int countSpecialistes() {
+        int count = 0;
+
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT COUNT(*) FROM specialiste";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return count;
+    }
+
+    public Map<String, Integer> countSpecialistesBySpecialite() {
+        Map<String, Integer> result = new HashMap<>();
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT specialite_nom, COUNT(*) as nb_specialistes FROM specialiste GROUP BY specialite_nom";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String specialiteNom = rs.getString("specialite_nom");
+                int count = rs.getInt("nb_specialistes");
+                result.put(specialiteNom, count);
+            }
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_SPECIALISTE, e);
+        }
+
+        return result;
+    }
+
 }

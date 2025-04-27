@@ -15,7 +15,7 @@ public class AccueilAdminView extends JFrame {
         setLayout(new BorderLayout());
 
         add(createHeader(user), BorderLayout.NORTH);
-        add(createMainPanel(), BorderLayout.CENTER);
+        add(createMainPanel(user), BorderLayout.CENTER);
 
         getContentPane().setBackground(new Color(245, 245, 245));
         setVisible(true);
@@ -62,7 +62,7 @@ public class AccueilAdminView extends JFrame {
         return header;
     }
 
-    private JPanel createMainPanel() {
+    private JPanel createMainPanel(Utilisateur user) {
         JPanel wrapper = new JPanel(new GridBagLayout());
         wrapper.setBackground(new Color(245, 245, 245));
 
@@ -74,21 +74,39 @@ public class AccueilAdminView extends JFrame {
         JButton ajouterSpecialiste = new JButton("Ajouter un spécialiste");
         ajouterSpecialiste.setBackground(new Color(52, 152, 219));
         ajouterSpecialiste.setForeground(Color.WHITE);
-        ajouterSpecialiste.addActionListener(e -> new AjoutSpecialisteView());
+        ajouterSpecialiste.addActionListener(e -> {
+                dispose();
+                new AjoutSpecialisteView();
+        });
 
         JButton gererRdv = new JButton("Gérer les rendez-vous");
         gererRdv.setBackground(new Color(52, 152, 219));
         gererRdv.setForeground(Color.WHITE);
-        gererRdv.addActionListener(e -> new GestionRendezVousAdminView());
+        gererRdv.addActionListener(e -> {
+            dispose();
+            new GestionRendezVousAdminView();
+        });
 
         JButton gererUtilisateurs = new JButton("Gérer les utilisateurs");
         gererUtilisateurs.setBackground(new Color(52, 152, 219));
         gererUtilisateurs.setForeground(Color.WHITE);
-        gererUtilisateurs.addActionListener(e -> new GestionUtilisateursAdminView());
+        gererUtilisateurs.addActionListener(e -> {
+            dispose();
+            new GestionUtilisateursAdminView();
+        });
+
+        JButton Statistiques = new JButton("Voir les statistiques");
+        Statistiques.setBackground(new Color(52, 152, 219));
+        Statistiques.setForeground(Color.WHITE);
+        Statistiques.addActionListener(e -> {
+            dispose();
+            new StatistiquesView(user);
+        });
 
         content.add(ajouterSpecialiste);
         content.add(gererRdv);
         content.add(gererUtilisateurs);
+        content.add(Statistiques);
 
         wrapper.add(content);
         return wrapper;

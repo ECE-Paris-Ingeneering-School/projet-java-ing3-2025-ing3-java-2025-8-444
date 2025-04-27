@@ -5,6 +5,11 @@ import model.Utilisateur;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
+import util.DatabaseConnection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 
 public class UtilisateurDAO implements DAO<Utilisateur> {
     protected Connection connection;
@@ -36,5 +41,23 @@ public class UtilisateurDAO implements DAO<Utilisateur> {
     @Override
     public boolean delete(Utilisateur obj) {
         throw new UnsupportedOperationException("Utiliser un DAO spécifique (Patient, Admin, etc.)");
+    }
+
+    public int countUtilisateur() {
+        int count = 0;
+
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT COUNT(*) FROM utilisateur";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return count;
     }
 }
