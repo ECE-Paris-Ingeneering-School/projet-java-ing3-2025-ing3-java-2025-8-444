@@ -5,6 +5,7 @@ import dao.DisponibiliteDAO;
 import dao.RendezVousDAO;
 import model.*;
 import view.ResultatsRechercheView;
+import controller.mail;
 
 import javax.swing.*;
 import java.util.List;
@@ -14,10 +15,12 @@ import java.util.stream.Collectors;
 public class PriseRdvController {
     private DisponibiliteDAO disponibiliteDAO;
     private RendezVousDAO rendezVousDAO;
+    private mail mail;
 
     public PriseRdvController() {
         this.disponibiliteDAO = DAOFactory.getDisponibiliteDAO();
         this.rendezVousDAO = DAOFactory.getRendezVousDAO();
+        this.mail = new mail();
     }
 
     public List<String> getToutesLesSpecialites() {
@@ -39,6 +42,7 @@ public class PriseRdvController {
         RendezVous rdv = new RendezVous(0, (Patient) patient, dispo.getSpecialiste(), dispo, "confirmé", "");
         boolean success = rendezVousDAO.save(rdv);
         if (success) {
+            mail.envoimail(patient, "Bonjour, \nVotre rendez vous Doc N Roll est confirmé ! Merci pour votre confiance.\nL'équipe Doc N Roll.");
             dispo.setEstDisponible(false);
             return disponibiliteDAO.update(dispo);
         }
