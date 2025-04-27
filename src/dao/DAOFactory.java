@@ -1,5 +1,11 @@
 package dao;
 
+/* Sources :
+https://drive.google.com/file/d/1mvTcyiJjID0ZQtiLQuOi2GhnBmaQY-aW/view
+https://drive.google.com/file/d/1jYcbKG3FMyEa1OpaPpYy5Om3dF3RCXky/view
+https://openclassrooms.com/fr/courses/2434016-developpez-des-sites-web-avec-java-ee/2438696-utiliser-le-modele-dao
+*/
+
 import exceptions.DaoCreationException;
 import exceptions.DatabaseConnectionException;
 import util.DatabaseConnection;
