@@ -1,7 +1,10 @@
 package util;
 
-public class exceptionsConstantes {
+/**
+ * Classe contenant toutes les constantes de messages d'exception utilisées sur le site
+ */
 
+public class exceptionsConstantes {
 
         public static final String SPECIALITE_NON_TROUVEE = "La spécialité demandée est introuvable.";
         public static final String ERREUR_SAUVEGARDE_SPECIALISTE = "Erreur lors de la sauvegarde du spécialiste.";
@@ -45,8 +48,6 @@ public class exceptionsConstantes {
         public static final String ERREUR_RESERVATION_RDV = "Erreur lors de la réservation du rendez-vous.";
         public static final String MESSAGE_SELECTION_CRENEAU = "Veuillez sélectionner un créneau.";
         public static final String MESSAGE_RESERVATION_REUSSIE = "Rendez-vous réservé avec succès !";
-
-
 
 }
 

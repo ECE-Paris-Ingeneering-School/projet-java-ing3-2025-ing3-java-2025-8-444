@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Classe utilitaire permettant de gérer la connexion à la base de données MySQL
+ */
+
 public class DatabaseConnection {
     private static final String URL = "jdbc:mysql://localhost:3306/rdv_specialiste";
     private static final String USER = "root";
@@ -17,6 +21,12 @@ public class DatabaseConnection {
         }
     }
 
+    /**
+     * Obtient une connexion active à la base de données
+     *
+     * @return Une instance {@link Connection} connectée à la base de données
+     * @throws SQLException Si une erreur survient lors de la connexion
+     */
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
