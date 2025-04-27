@@ -1,11 +1,14 @@
 package view;
 
 import controller.ConnexionController;
+import exceptions.DaoOperationException;
 import model.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+
+import static util.exceptionsConstantes.IDENTIFIANTS_INCORRECTS;
 
 public class ConnexionView extends JFrame {
     private JTextField emailField;
@@ -111,19 +114,25 @@ public class ConnexionView extends JFrame {
         String email = emailField.getText();
         String mdp = new String(passwordField.getPassword());
 
-        Utilisateur user = controller.seConnecter(email, mdp);
-        if (user != null) {
-            dispose();
+        try {
+            Utilisateur user = controller.seConnecter(email, mdp);
+            if (user != null) {
+                dispose();
 
-            if (user instanceof Patient) {
-                new AccueilPatientView((Patient) user);
-            } else if (user instanceof Admin) {
-                new AccueilAdminView((Admin) user);
-            } else if (user instanceof Specialiste) {
-                new AccueilSpecialisteView((Specialiste) user);
+                if (user instanceof Patient) {
+                    new AccueilPatientView((Patient) user);
+                } else if (user instanceof Admin) {
+                    new AccueilAdminView((Admin) user);
+                } else if (user instanceof Specialiste) {
+                    new AccueilSpecialisteView((Specialiste) user);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, IDENTIFIANTS_INCORRECTS, "Erreur", JOptionPane.ERROR_MESSAGE);
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Identifiants incorrects", "Erreur", JOptionPane.ERROR_MESSAGE);
+        } catch (DaoOperationException ex) {
+            JOptionPane.showMessageDialog(this, "Erreur de connexion à la base de données : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erreur inattendue : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

@@ -1,6 +1,9 @@
 package view;
 
 import controller.DisponibiliteController;
+import exceptions.DaoOperationException;
+import exceptions.DisponibiliteExistanteException;
+import exceptions.DisponibiliteSaveException;
 import model.Lieu;
 import model.Specialiste;
 
@@ -8,6 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 public class AjoutDisponibiliteView extends JFrame {
@@ -52,7 +56,12 @@ public class AjoutDisponibiliteView extends JFrame {
         panel.add(finField);
 
         panel.add(new JLabel("Lieu :"));
-        lieuCombo = new JComboBox<>(controller.getTousLieux().toArray(new Lieu[0]));
+        try {
+            lieuCombo = new JComboBox<>(controller.getTousLieux().toArray(new Lieu[0]));
+        } catch (DaoOperationException e) {
+            JOptionPane.showMessageDialog(this, "Erreur lors du chargement des lieux : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+            lieuCombo = new JComboBox<>();
+        }
         panel.add(lieuCombo);
 
         return panel;
@@ -73,15 +82,22 @@ public class AjoutDisponibiliteView extends JFrame {
             LocalTime fin = LocalTime.parse(finField.getText().trim());
             Lieu lieu = (Lieu) lieuCombo.getSelectedItem();
 
-            boolean success = controller.ajouterDisponibilite(specialiste, date, debut, fin, lieu);
-            if (success) {
-                JOptionPane.showMessageDialog(this, "Disponibilité ajoutée avec succès !");
-                dispose();
-            } else {
-                JOptionPane.showMessageDialog(this, "Erreur : créneau peut-être déjà pris ou invalide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            try {
+                boolean success = controller.ajouterDisponibilite(specialiste, date, debut, fin, lieu);
+                if (success) {
+                    JOptionPane.showMessageDialog(this, "Disponibilité ajoutée avec succès !");
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erreur : créneau peut-être déjà pris ou invalide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (DisponibiliteExistanteException | DisponibiliteSaveException | DaoOperationException e) {
+                JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout de la disponibilité : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Format invalide. Veuillez réessayer.", "Erreur", JOptionPane.ERROR_MESSAGE);
+
+        } catch (DateTimeParseException e) {
+            JOptionPane.showMessageDialog(this, "Format de date ou d'heure invalide. Veuillez réessayer.", "Erreur", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erreur inattendue : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

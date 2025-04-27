@@ -1,6 +1,7 @@
 package view;
 
 import controller.PriseRdvController;
+import exceptions.DaoOperationException;
 import model.Disponibilite;
 import model.Specialiste;
 import model.Utilisateur;
@@ -8,6 +9,8 @@ import model.Utilisateur;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+
+import static util.exceptionsConstantes.*;
 
 public class RechercheEtPriseRDVView extends JFrame {
     private Utilisateur user;
@@ -84,9 +87,14 @@ public class RechercheEtPriseRDVView extends JFrame {
         content.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         content.setPreferredSize(new Dimension(600, 400));
 
-        specialiteCombo = new JComboBox<>(controller.getToutesLesSpecialites().toArray(new String[0]));
-        specialiteCombo.setFont(new Font("SansSerif", Font.PLAIN, 16));
-        specialiteCombo.addActionListener(e -> chargerDisponibilites());
+        try {
+            specialiteCombo = new JComboBox<>(controller.getToutesLesSpecialites().toArray(new String[0]));
+            specialiteCombo.setFont(new Font("SansSerif", Font.PLAIN, 16));
+            specialiteCombo.addActionListener(e -> chargerDisponibilites());
+        } catch (DaoOperationException e) {
+            JOptionPane.showMessageDialog(this, ERREUR_CHARGEMENT_SPECIALITES + "\n" + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+            specialiteCombo = new JComboBox<>();
+        }
 
         dispoListModel = new DefaultListModel<>();
         dispoList = new JList<>(dispoListModel);
@@ -108,30 +116,38 @@ public class RechercheEtPriseRDVView extends JFrame {
     }
 
     private void chargerDisponibilites() {
-        String specialite = (String) specialiteCombo.getSelectedItem();
-        disponibilites = controller.getDisponibilitesParSpecialite(specialite);
-        dispoListModel.clear();
-        for (Disponibilite d : disponibilites) {
-            Specialiste s = d.getSpecialiste();
-            dispoListModel.addElement(d.getDate() + " " + d.getHeureDebut() + " - " +
-                    d.getHeureFin() + " | " + s.getNom() + " " + s.getPrenom() + " | " +
-                    d.getLieu().getNom());
+        try {
+            String specialite = (String) specialiteCombo.getSelectedItem();
+            disponibilites = controller.getDisponibilitesParSpecialite(specialite);
+            dispoListModel.clear();
+            for (Disponibilite d : disponibilites) {
+                Specialiste s = d.getSpecialiste();
+                dispoListModel.addElement(d.getDate() + " " + d.getHeureDebut() + " - " +
+                        d.getHeureFin() + " | " + s.getNom() + " " + s.getPrenom() + " | " +
+                        d.getLieu().getNom());
+            }
+        } catch (DaoOperationException e) {
+            JOptionPane.showMessageDialog(this, ERREUR_CHARGEMENT_DISPOS + "\n" + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void reserverSelection() {
         int index = dispoList.getSelectedIndex();
         if (index >= 0) {
-            Disponibilite dispoChoisie = disponibilites.get(index);
-            boolean success = controller.reserverDispo(user, dispoChoisie);
-            if (success) {
-                JOptionPane.showMessageDialog(this, "Rendez-vous réservé avec succès !");
-                chargerDisponibilites();
-            } else {
-                JOptionPane.showMessageDialog(this, "Échec de la réservation.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            try {
+                Disponibilite dispoChoisie = disponibilites.get(index);
+                boolean success = controller.reserverDispo(user, dispoChoisie);
+                if (success) {
+                    JOptionPane.showMessageDialog(this, MESSAGE_RESERVATION_REUSSIE);
+                    chargerDisponibilites();
+                } else {
+                    JOptionPane.showMessageDialog(this, ERREUR_RESERVATION_RDV, "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (DaoOperationException e) {
+                JOptionPane.showMessageDialog(this, ERREUR_RESERVATION_RDV + "\n" + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Veuillez sélectionner un créneau.");
+            JOptionPane.showMessageDialog(this, MESSAGE_SELECTION_CRENEAU);
         }
     }
 }

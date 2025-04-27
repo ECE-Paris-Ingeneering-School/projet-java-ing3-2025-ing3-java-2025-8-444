@@ -3,6 +3,7 @@ package view;
 import dao.AdminDAO;
 import dao.PatientDAO;
 import dao.SpecialisteDAO;
+import exceptions.DaoOperationException;
 import model.Admin;
 import model.Patient;
 import model.Specialiste;
@@ -12,6 +13,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static util.exceptionsConstantes.*;
 
 public class GestionUtilisateursAdminView extends JFrame {
 
@@ -40,11 +43,15 @@ public class GestionUtilisateursAdminView extends JFrame {
 
     private void chargerUtilisateurs() {
         userModel.clear();
-        List<Utilisateur> all = new ArrayList<>();
-        all.addAll(patientDAO.getAll());
-        all.addAll(adminDAO.getAll());
-        all.addAll(specialisteDAO.getAll());
-        all.forEach(userModel::addElement);
+        try {
+            List<Utilisateur> all = new ArrayList<>();
+            all.addAll(patientDAO.getAll());
+            all.addAll(adminDAO.getAll());
+            all.addAll(specialisteDAO.getAll());
+            all.forEach(userModel::addElement);
+        } catch (DaoOperationException e) {
+            JOptionPane.showMessageDialog(this, ERREUR_CHARGEMENT_UTILISATEUR + "\n" + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private JPanel createButtonPanel() {
@@ -81,15 +88,19 @@ public class GestionUtilisateursAdminView extends JFrame {
             u.setEmail(email);
             u.setMotDePasse(mdp);
             boolean success = false;
-            if (u instanceof Patient) success = patientDAO.update((Patient) u);
-            else if (u instanceof Specialiste) success = specialisteDAO.update((Specialiste) u);
-            else if (u instanceof Admin) success = adminDAO.update((Admin) u);
+            try {
+                if (u instanceof Patient) success = patientDAO.update((Patient) u);
+                else if (u instanceof Specialiste) success = specialisteDAO.update((Specialiste) u);
+                else if (u instanceof Admin) success = adminDAO.update((Admin) u);
 
-            if (success) {
-                JOptionPane.showMessageDialog(this, "Utilisateur modifié avec succès.");
-                chargerUtilisateurs();
-            } else {
-                JOptionPane.showMessageDialog(this, "Erreur lors de la modification.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                if (success) {
+                    JOptionPane.showMessageDialog(this, "Utilisateur modifié avec succès.");
+                    chargerUtilisateurs();
+                } else {
+                    JOptionPane.showMessageDialog(this, ERREUR_MISE_A_JOUR_UTILISATEUR, "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (DaoOperationException e) {
+                JOptionPane.showMessageDialog(this, ERREUR_MISE_A_JOUR_UTILISATEUR + "\n" + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -101,15 +112,19 @@ public class GestionUtilisateursAdminView extends JFrame {
         int confirm = JOptionPane.showConfirmDialog(this, "Supprimer ce compte ?", "Confirmation", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             boolean success = false;
-            if (u instanceof Patient) success = patientDAO.delete((Patient) u);
-            else if (u instanceof Specialiste) success = specialisteDAO.delete((Specialiste) u);
-            else if (u instanceof Admin) success = adminDAO.delete((Admin) u);
+            try {
+                if (u instanceof Patient) success = patientDAO.delete((Patient) u);
+                else if (u instanceof Specialiste) success = specialisteDAO.delete((Specialiste) u);
+                else if (u instanceof Admin) success = adminDAO.delete((Admin) u);
 
-            if (success) {
-                JOptionPane.showMessageDialog(this, "Compte supprimé.");
-                chargerUtilisateurs();
-            } else {
-                JOptionPane.showMessageDialog(this, "Échec de la suppression.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                if (success) {
+                    JOptionPane.showMessageDialog(this, "Compte supprimé.");
+                    chargerUtilisateurs();
+                } else {
+                    JOptionPane.showMessageDialog(this, ERREUR_SUPPRESSION_UTILISATEUR, "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (DaoOperationException e) {
+                JOptionPane.showMessageDialog(this, ERREUR_SUPPRESSION_UTILISATEUR + "\n" + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         }
     }

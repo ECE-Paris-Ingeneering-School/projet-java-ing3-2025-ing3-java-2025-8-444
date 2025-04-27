@@ -3,6 +3,7 @@ package view;
 import controller.Mail;
 import dao.DisponibiliteDAO;
 import dao.RendezVousDAO;
+import exceptions.DaoOperationException;
 import model.Disponibilite;
 import model.RendezVous;
 import model.Utilisateur;
@@ -88,7 +89,13 @@ public class AccueilSpecialisteView extends JFrame {
 
         DefaultListModel<String> modelDispos = new DefaultListModel<>();
         DisponibiliteDAO dispoDAO = new DisponibiliteDAO();
-        List<Disponibilite> dispos = dispoDAO.getAllForSpecialiste(user.getId());
+        List<Disponibilite> dispos;
+        try {
+            dispos = dispoDAO.getAllForSpecialiste(user.getId());
+        } catch (DaoOperationException e) {
+            JOptionPane.showMessageDialog(this, "Erreur lors du chargement de vos disponibilités : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+            dispos = List.of();
+        }
 
         if (dispos.isEmpty()) {
             modelDispos.addElement("Aucune disponibilité déclarée.");
@@ -121,9 +128,7 @@ public class AccueilSpecialisteView extends JFrame {
 
         DefaultListModel<String> modelRDV = new DefaultListModel<>();
         RendezVousDAO rdvDAO = new RendezVousDAO();
-        List<RendezVous> rdvs = rdvDAO.getAll();
-
-        mesRendezVous = new ArrayList<>();
+        List<RendezVous> rdvs = rdvDAO.getAll(); // on filtre ensuite dans le for
 
         boolean hasRdv = false;
         for (RendezVous r : rdvs) {

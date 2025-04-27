@@ -1,12 +1,16 @@
 package view;
 
 import controller.PatientController;
-import model.Patient;
 import controller.Mail;
+import exceptions.DaoOperationException;
+import exceptions.MailSendException;
+import model.Patient;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+
+import static util.exceptionsConstantes.*;
 
 public class InscriptionView extends JFrame {
     private JTextField nomField;
@@ -120,23 +124,37 @@ public class InscriptionView extends JFrame {
         String mdp = new String(passwordField.getPassword()).trim();
 
         if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || mdp.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs.", "Champs manquants", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, CHAMPS_INCOMPLETS, "Erreur", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         if (!email.contains("@") || !email.contains(".")) {
-            JOptionPane.showMessageDialog(this, "Veuillez entrer une adresse email valide.", "Email invalide", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, EMAIL_INVALIDE, "Erreur", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        if (controller.inscrirePatient(nom, prenom, email, mdp)) {
-            JOptionPane.showMessageDialog(this, "Inscription réussie ! Bienvenue " + prenom + " !");
-            dispose();
-            Patient newPatient = controller.getPatientByEmail(email);
-            new AccueilPatientView(newPatient);
-            mail.envoimail(newPatient, "Bienvenue sur Doc N Roll " + prenom + " !\nL'équipe Doc N Roll ");
-        } else {
-            JOptionPane.showMessageDialog(this, "Erreur : Email déjà utilisé ou problème d'inscription.", "Erreur", JOptionPane.ERROR_MESSAGE);
+        try {
+            if (controller.inscrirePatient(nom, prenom, email, mdp)) {
+                JOptionPane.showMessageDialog(this, "Inscription réussie ! Bienvenue " + prenom + " !");
+                Patient newPatient = controller.getPatientByEmail(email);
+
+                if (newPatient != null) {
+                    dispose();
+                    new AccueilPatientView(newPatient);
+
+                    try {
+                        mail.envoimail(newPatient, "Bienvenue sur Doc N Roll " + prenom + " !\nL'équipe Doc N Roll.");
+                    } catch (MailSendException ex) {
+                        JOptionPane.showMessageDialog(this, ERREUR_ENVOI_EMAIL + "\n" + ex.getMessage(), "Erreur Email", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, ERREUR_RECUPERATION_PATIENT, "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, ERREUR_INSCRIPTION_PATIENT, "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (DaoOperationException ex) {
+            JOptionPane.showMessageDialog(this, ERREUR_INSCRIPTION_PATIENT + "\n" + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
