@@ -12,10 +12,21 @@ import java.util.List;
 
 import static util.exceptionsConstantes.ERREUR_DAO_DISPONIBILITE;
 
+/**
+ * DAO (Data Access Object) pour la gestion des disponibilités dans la base de données.
+ * Implémente les opérations CRUD pour les objets {@link Disponibilite}.
+ */
 public class DisponibiliteDAO implements DAO<Disponibilite> {
     private final LieuDAO lieuDAO = new LieuDAO();
     private final SpecialisteDAO specialisteDAO = new SpecialisteDAO();
 
+    /**
+     * Récupère une disponibilité par son identifiant.
+     *
+     * @param id L'identifiant de la disponibilité.
+     * @return L'objet {@link Disponibilite} correspondant ou {@code null} s'il n'existe pas.
+     * @throws DaoOperationException En cas d'erreur lors de l'accès à la base de données.
+     */
     @Override
     public Disponibilite get(int id) {
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -42,6 +53,12 @@ public class DisponibiliteDAO implements DAO<Disponibilite> {
         return null;
     }
 
+    /**
+     * Récupère toutes les disponibilités.
+     *
+     * @return Une liste de toutes les disponibilités.
+     * @throws DaoOperationException En cas d'erreur lors de l'accès à la base de données.
+     */
     @Override
     public List<Disponibilite> getAll() {
         List<Disponibilite> list = new ArrayList<>();
@@ -68,6 +85,13 @@ public class DisponibiliteDAO implements DAO<Disponibilite> {
         return list;
     }
 
+    /**
+     * Récupère toutes les disponibilités pour un spécialiste donné.
+     *
+     * @param specialisteId L'identifiant du spécialiste.
+     * @return Une liste des disponibilités du spécialiste.
+     * @throws DaoOperationException En cas d'erreur lors de l'accès à la base de données.
+     */
     public List<Disponibilite> getAllForSpecialiste(int specialisteId) {
         List<Disponibilite> list = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -95,6 +119,13 @@ public class DisponibiliteDAO implements DAO<Disponibilite> {
         return list;
     }
 
+    /**
+     * Sauvegarde une nouvelle disponibilité dans la base de données.
+     *
+     * @param d La disponibilité à sauvegarder.
+     * @return {@code true} si l'opération a réussi, {@code false} sinon.
+     * @throws DaoOperationException En cas d'erreur lors de l'accès à la base de données.
+     */
     @Override
     public boolean save(Disponibilite d) {
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -113,6 +144,13 @@ public class DisponibiliteDAO implements DAO<Disponibilite> {
         }
     }
 
+    /**
+     * Met à jour une disponibilité existante.
+     *
+     * @param d La disponibilité avec les nouvelles informations.
+     * @return {@code true} si la mise à jour a réussi, {@code false} sinon.
+     * @throws DaoOperationException En cas d'erreur lors de l'accès à la base de données.
+     */
     @Override
     public boolean update(Disponibilite d) {
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -132,6 +170,13 @@ public class DisponibiliteDAO implements DAO<Disponibilite> {
         }
     }
 
+    /**
+     * Supprime une disponibilité existante.
+     *
+     * @param d La disponibilité à supprimer.
+     * @return {@code true} si la suppression a réussi, {@code false} sinon.
+     * @throws DaoOperationException En cas d'erreur lors de l'accès à la base de données.
+     */
     @Override
     public boolean delete(Disponibilite d) {
         try (Connection conn = DatabaseConnection.getConnection()) {

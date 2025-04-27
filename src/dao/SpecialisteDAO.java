@@ -13,8 +13,19 @@ import java.util.Map;
 
 import static util.exceptionsConstantes.ERREUR_DAO_SPECIALISTE;
 
+/**
+ * DAO (Data Access Object) pour la gestion des spécialistes dans la base de données.
+ * Implémente les opérations CRUD pour les objets {@link Specialiste}.
+ */
 public class SpecialisteDAO implements DAO<Specialiste> {
 
+    /**
+     * Récupère un spécialiste par son identifiant.
+     *
+     * @param id L'identifiant du spécialiste.
+     * @return L'objet {@link Specialiste} correspondant ou {@code null} s'il n'existe pas.
+     * @throws DaoOperationException En cas d'erreur d'accès à la base de données.
+     */
     @Override
     public Specialiste get(int id) {
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -45,6 +56,12 @@ public class SpecialisteDAO implements DAO<Specialiste> {
         return null;
     }
 
+    /**
+     * Récupère tous les spécialistes de la base de données.
+     *
+     * @return Une liste de tous les spécialistes.
+     * @throws DaoOperationException En cas d'erreur d'accès à la base de données.
+     */
     @Override
     public List<Specialiste> getAll() {
         List<Specialiste> list = new ArrayList<>();
@@ -74,6 +91,13 @@ public class SpecialisteDAO implements DAO<Specialiste> {
         return list;
     }
 
+    /**
+     * Sauvegarde un nouveau spécialiste dans la base de données.
+     *
+     * @param s Le spécialiste à sauvegarder.
+     * @return {@code true} si l'enregistrement a réussi, {@code false} sinon.
+     * @throws DaoOperationException En cas d'erreur d'accès à la base de données.
+     */
     @Override
     public boolean save(Specialiste s) {
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -109,6 +133,13 @@ public class SpecialisteDAO implements DAO<Specialiste> {
         return false;
     }
 
+    /**
+     * Met à jour les informations d'un spécialiste existant.
+     *
+     * @param s Le spécialiste avec les nouvelles informations.
+     * @return {@code true} si la mise à jour a réussi, {@code false} sinon.
+     * @throws DaoOperationException En cas d'erreur d'accès à la base de données.
+     */
     @Override
     public boolean update(Specialiste s) {
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -128,6 +159,13 @@ public class SpecialisteDAO implements DAO<Specialiste> {
         }
     }
 
+    /**
+     * Supprime un spécialiste de la base de données.
+     *
+     * @param s Le spécialiste à supprimer.
+     * @return {@code true} si la suppression a réussi, {@code false} sinon.
+     * @throws DaoOperationException En cas d'erreur d'accès à la base de données.
+     */
     @Override
     public boolean delete(Specialiste s) {
         try (Connection conn = DatabaseConnection.getConnection()) {

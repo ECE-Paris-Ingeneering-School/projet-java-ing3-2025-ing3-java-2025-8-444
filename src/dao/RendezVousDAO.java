@@ -10,11 +10,22 @@ import java.util.List;
 
 import static util.exceptionsConstantes.ERREUR_DAO_RDV;
 
+/**
+ * DAO (Data Access Object) pour la gestion des rendez-vous dans la base de données.
+ * Implémente les opérations CRUD pour les objets {@link RendezVous}.
+ */
 public class RendezVousDAO implements DAO<RendezVous> {
     private final PatientDAO patientDAO = new PatientDAO();
     private final SpecialisteDAO specialisteDAO = new SpecialisteDAO();
     private final DisponibiliteDAO disponibiliteDAO = new DisponibiliteDAO();
 
+    /**
+     * Récupère un rendez-vous par son identifiant.
+     *
+     * @param id L'identifiant du rendez-vous.
+     * @return L'objet {@link RendezVous} correspondant ou {@code null} s'il n'existe pas.
+     * @throws DaoOperationException En cas d'erreur d'accès à la base de données.
+     */
     @Override
     public RendezVous get(int id) {
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -37,6 +48,12 @@ public class RendezVousDAO implements DAO<RendezVous> {
         return null;
     }
 
+    /**
+     * Récupère tous les rendez-vous.
+     *
+     * @return Une liste de tous les rendez-vous.
+     * @throws DaoOperationException En cas d'erreur d'accès à la base de données.
+     */
     @Override
     public List<RendezVous> getAll() {
         List<RendezVous> list = new ArrayList<>();
@@ -59,6 +76,13 @@ public class RendezVousDAO implements DAO<RendezVous> {
         return list;
     }
 
+    /**
+     * Récupère tous les rendez-vous pour un patient donné, sauf ceux annulés.
+     *
+     * @param patientId L'identifiant du patient.
+     * @return Une liste des rendez-vous du patient.
+     * @throws DaoOperationException En cas d'erreur d'accès à la base de données.
+     */
     public List<RendezVous> getAllForPatient(int patientId) {
         List<RendezVous> list = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -82,6 +106,13 @@ public class RendezVousDAO implements DAO<RendezVous> {
         return list;
     }
 
+    /**
+     * Annule un rendez-vous en mettant à jour son statut.
+     *
+     * @param rdv Le rendez-vous à annuler.
+     * @return {@code true} si l'annulation a réussi, {@code false} sinon.
+     * @throws DaoOperationException En cas d'erreur d'accès à la base de données.
+     */
     public boolean annuler(RendezVous rdv) {
         try (Connection conn = DatabaseConnection.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("UPDATE rendezvous SET statut = ? WHERE id = ?");
@@ -93,6 +124,13 @@ public class RendezVousDAO implements DAO<RendezVous> {
         }
     }
 
+    /**
+     * Sauvegarde un nouveau rendez-vous dans la base de données.
+     *
+     * @param rdv Le rendez-vous à sauvegarder.
+     * @return {@code true} si l'insertion a réussi, {@code false} sinon.
+     * @throws DaoOperationException En cas d'erreur d'accès à la base de données.
+     */
     @Override
     public boolean save(RendezVous rdv) {
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -110,6 +148,13 @@ public class RendezVousDAO implements DAO<RendezVous> {
         }
     }
 
+    /**
+     * Met à jour un rendez-vous existant.
+     *
+     * @param rdv Le rendez-vous avec les informations mises à jour.
+     * @return {@code true} si la mise à jour a réussi, {@code false} sinon.
+     * @throws DaoOperationException En cas d'erreur d'accès à la base de données.
+     */
     @Override
     public boolean update(RendezVous rdv) {
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -128,6 +173,13 @@ public class RendezVousDAO implements DAO<RendezVous> {
         }
     }
 
+    /**
+     * Supprime un rendez-vous de la base de données.
+     *
+     * @param rdv Le rendez-vous à supprimer.
+     * @return {@code true} si la suppression a réussi, {@code false} sinon.
+     * @throws DaoOperationException En cas d'erreur d'accès à la base de données.
+     */
     @Override
     public boolean delete(RendezVous rdv) {
         try (Connection conn = DatabaseConnection.getConnection()) {
