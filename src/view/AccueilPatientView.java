@@ -1,5 +1,13 @@
 package view;
 
+/* Sources :
+https://docs.google.com/document/d/1pqb7wHIJjQyNsmtiUEV_-4jRH8h9gBCJ/edit?tab=t.0
+https://boostcamp.omneseducation.com/pluginfile.php/4818934/mod_resource/content/1/Creation_interface_graphique_avec_Swing.pdf
+https://www.geeksforgeeks.org/introduction-to-java-swing/
+https://stackoverflow.com/questions/tagged/java
+https://examples.javacodegeeks.com/java-development/core-java/java-swing-mvc-example/
+*/
+
 import controller.Mail;
 import dao.RendezVousDAO;
 import exceptions.DaoOperationException;
