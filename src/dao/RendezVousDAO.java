@@ -1,9 +1,14 @@
 package dao;
 
-import model.*;
+import exceptions.DaoOperationException;
+import model.RendezVous;
 import util.DatabaseConnection;
+
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static util.exceptionsConstantes.ERREUR_DAO_RDV;
 
 public class RendezVousDAO implements DAO<RendezVous> {
     private final PatientDAO patientDAO = new PatientDAO();
@@ -26,7 +31,9 @@ public class RendezVousDAO implements DAO<RendezVous> {
                         rs.getString("notes")
                 );
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_RDV, e);
+        }
         return null;
     }
 
@@ -46,7 +53,9 @@ public class RendezVousDAO implements DAO<RendezVous> {
                         rs.getString("notes")
                 ));
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_RDV, e);
+        }
         return list;
     }
 
@@ -67,7 +76,9 @@ public class RendezVousDAO implements DAO<RendezVous> {
                         rs.getString("notes")
                 ));
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_RDV, e);
+        }
         return list;
     }
 
@@ -78,29 +89,33 @@ public class RendezVousDAO implements DAO<RendezVous> {
             stmt.setInt(2, rdv.getId());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoOperationException(ERREUR_DAO_RDV, e);
         }
-        return false;
     }
 
     @Override
     public boolean save(RendezVous rdv) {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO rendezvous (patient_id, specialiste_id, disponibilite_id, statut, notes) VALUES (?, ?, ?, ?, ?)");
+            PreparedStatement stmt = conn.prepareStatement(
+                    "INSERT INTO rendezvous (patient_id, specialiste_id, disponibilite_id, statut, notes) VALUES (?, ?, ?, ?, ?)"
+            );
             stmt.setInt(1, rdv.getPatient().getId());
             stmt.setInt(2, rdv.getSpecialiste().getId());
             stmt.setInt(3, rdv.getDisponibilite().getId());
             stmt.setString(4, rdv.getStatut());
             stmt.setString(5, rdv.getNotes());
             return stmt.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); }
-        return false;
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_RDV, e);
+        }
     }
 
     @Override
     public boolean update(RendezVous rdv) {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement("UPDATE rendezvous SET patient_id=?, specialiste_id=?, disponibilite_id=?, statut=?, notes=? WHERE id=?");
+            PreparedStatement stmt = conn.prepareStatement(
+                    "UPDATE rendezvous SET patient_id=?, specialiste_id=?, disponibilite_id=?, statut=?, notes=? WHERE id=?"
+            );
             stmt.setInt(1, rdv.getPatient().getId());
             stmt.setInt(2, rdv.getSpecialiste().getId());
             stmt.setInt(3, rdv.getDisponibilite().getId());
@@ -108,8 +123,9 @@ public class RendezVousDAO implements DAO<RendezVous> {
             stmt.setString(5, rdv.getNotes());
             stmt.setInt(6, rdv.getId());
             return stmt.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); }
-        return false;
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_RDV, e);
+        }
     }
 
     @Override
@@ -118,7 +134,8 @@ public class RendezVousDAO implements DAO<RendezVous> {
             PreparedStatement stmt = conn.prepareStatement("DELETE FROM rendezvous WHERE id = ?");
             stmt.setInt(1, rdv.getId());
             return stmt.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); }
-        return false;
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_RDV, e);
+        }
     }
 }

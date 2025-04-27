@@ -1,12 +1,17 @@
 package dao;
 
+import exceptions.DaoOperationException;
 import model.Patient;
 import util.DatabaseConnection;
 
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static util.exceptionsConstantes.ERREUR_DAO_PATIENT;
 
 public class PatientDAO implements DAO<Patient> {
+
     @Override
     public Patient get(int id) {
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -25,8 +30,7 @@ public class PatientDAO implements DAO<Patient> {
                 );
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-
+            throw new DaoOperationException(ERREUR_DAO_PATIENT, e);
         }
         return null;
     }
@@ -49,7 +53,7 @@ public class PatientDAO implements DAO<Patient> {
                 ));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoOperationException(ERREUR_DAO_PATIENT, e);
         }
         return patients;
     }
@@ -83,7 +87,7 @@ public class PatientDAO implements DAO<Patient> {
 
             conn.rollback();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoOperationException(ERREUR_DAO_PATIENT, e);
         }
         return false;
     }
@@ -100,9 +104,8 @@ public class PatientDAO implements DAO<Patient> {
             stmt.setInt(5, patient.getId());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoOperationException(ERREUR_DAO_PATIENT, e);
         }
-        return false;
     }
 
     @Override
@@ -113,8 +116,7 @@ public class PatientDAO implements DAO<Patient> {
             stmt.setInt(1, patient.getId());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoOperationException(ERREUR_DAO_PATIENT, e);
         }
-        return false;
     }
 }

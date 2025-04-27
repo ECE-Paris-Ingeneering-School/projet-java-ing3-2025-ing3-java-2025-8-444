@@ -1,11 +1,17 @@
 package dao;
 
+import exceptions.DaoOperationException;
 import model.Specialite;
-import java.sql.*;
-import java.util.*;
 import util.DatabaseConnection;
 
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static util.exceptionsConstantes.ERREUR_DAO_SPECIALITE;
+
 public class SpecialiteDAO implements DAO<Specialite> {
+
     @Override
     public Specialite get(int id) {
         throw new UnsupportedOperationException("Utiliser getByName(String nom) à la place.");
@@ -19,7 +25,9 @@ public class SpecialiteDAO implements DAO<Specialite> {
             if (rs.next()) {
                 return new Specialite(rs.getString("nom"), rs.getString("description"));
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_SPECIALITE, e);
+        }
         return null;
     }
 
@@ -32,7 +40,9 @@ public class SpecialiteDAO implements DAO<Specialite> {
             while (rs.next()) {
                 list.add(new Specialite(rs.getString("nom"), rs.getString("description")));
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_SPECIALITE, e);
+        }
         return list;
     }
 
@@ -43,8 +53,9 @@ public class SpecialiteDAO implements DAO<Specialite> {
             stmt.setString(1, s.getNom());
             stmt.setString(2, s.getDescription());
             return stmt.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); }
-        return false;
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_SPECIALITE, e);
+        }
     }
 
     @Override
@@ -54,8 +65,9 @@ public class SpecialiteDAO implements DAO<Specialite> {
             stmt.setString(1, s.getDescription());
             stmt.setString(2, s.getNom());
             return stmt.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); }
-        return false;
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_SPECIALITE, e);
+        }
     }
 
     @Override
@@ -64,7 +76,8 @@ public class SpecialiteDAO implements DAO<Specialite> {
             PreparedStatement stmt = conn.prepareStatement("DELETE FROM specialite WHERE nom=?");
             stmt.setString(1, s.getNom());
             return stmt.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); }
-        return false;
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_SPECIALITE, e);
+        }
     }
 }

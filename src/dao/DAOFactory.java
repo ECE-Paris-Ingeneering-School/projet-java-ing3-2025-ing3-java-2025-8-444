@@ -1,9 +1,14 @@
 package dao;
 
+import exceptions.DaoCreationException;
+import exceptions.DatabaseConnectionException;
 import util.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+
+import static util.exceptionsConstantes.ERREUR_CONNEXION_BDD;
+import static util.exceptionsConstantes.ERREUR_CREATION_DAO;
 
 public class DAOFactory {
     private static Connection connection;
@@ -12,96 +17,87 @@ public class DAOFactory {
         try {
             connection = DatabaseConnection.getConnection();
         } catch (SQLException e) {
-            System.err.println("Erreur lors de la connexion à la base de données: " + e.getMessage());
-            // En production, utilisez un logger à la place de System.err
+            throw new DatabaseConnectionException(ERREUR_CONNEXION_BDD, e);
+        }
+    }
+
+    private static void checkConnection() throws SQLException {
+        if (connection == null || connection.isClosed()) {
+            connection = DatabaseConnection.getConnection();
         }
     }
 
     public static UtilisateurDAO getUtilisateurDAO() {
         try {
-            if (connection == null || connection.isClosed()) {
-                connection = DatabaseConnection.getConnection();
-            }
+            checkConnection();
             return new UtilisateurDAO(connection);
         } catch (SQLException e) {
-            throw new RuntimeException("Erreur lors de la création du DAO Utilisateur", e);
+            throw new DaoCreationException(ERREUR_CREATION_DAO, e);
         }
     }
 
     public static PatientDAO getPatientDAO() {
         try {
-            if (connection == null || connection.isClosed()) {
-                connection = DatabaseConnection.getConnection();
-            }
+            checkConnection();
             return new PatientDAO();
         } catch (SQLException e) {
-            throw new RuntimeException("Erreur lors de la création du DAO Patient", e);
+            throw new DaoCreationException(ERREUR_CREATION_DAO + " [PatientDAO]", e);
         }
     }
 
     public static AdminDAO getAdminDAO() {
         try {
-            if (connection == null || connection.isClosed()) {
-                connection = DatabaseConnection.getConnection();
-            }
+            checkConnection();
             return new AdminDAO();
         } catch (SQLException e) {
-            throw new RuntimeException("Erreur lors de la création du DAO Admin", e);
+            throw new DaoCreationException(ERREUR_CREATION_DAO + " [AdminDAO]", e);
         }
     }
+
 
     public static SpecialisteDAO getSpecialisteDAO() {
         try {
-            if (connection == null || connection.isClosed()) {
-                connection = DatabaseConnection.getConnection();
-            }
+            checkConnection();
             return new SpecialisteDAO();
         } catch (SQLException e) {
-            throw new RuntimeException("Erreur lors de la création du DAO Specialiste", e);
+            throw new DaoCreationException(ERREUR_CREATION_DAO + " [SpecialisteDAO]", e);
         }
     }
 
+
     public static LieuDAO getLieuDAO() {
         try {
-            if (connection == null || connection.isClosed()) {
-                connection = DatabaseConnection.getConnection();
-            }
+            checkConnection();
             return new LieuDAO();
         } catch (SQLException e) {
-            throw new RuntimeException("Erreur lors de la création du DAO Lieu", e);
+            throw new DaoCreationException(ERREUR_CREATION_DAO+ " [LieuDAO]", e);
         }
     }
 
     public static SpecialiteDAO getSpecialiteDAO() {
         try {
-            if (connection == null || connection.isClosed()) {
-                connection = DatabaseConnection.getConnection();
-            }
+            checkConnection();
             return new SpecialiteDAO();
         } catch (SQLException e) {
-            throw new RuntimeException("Erreur lors de la création du DAO Specialite", e);
+            throw new DaoCreationException(ERREUR_CREATION_DAO+ " [SpecialiteDAO]", e);
         }
     }
 
     public static DisponibiliteDAO getDisponibiliteDAO() {
         try {
-            if (connection == null || connection.isClosed()) {
-                connection = DatabaseConnection.getConnection();
-            }
+            checkConnection();
             return new DisponibiliteDAO();
         } catch (SQLException e) {
-            throw new RuntimeException("Erreur lors de la création du DAO Disponibilite", e);
+            throw new DaoCreationException(ERREUR_CREATION_DAO+ " [DiqponibilitéDAO]", e);
         }
     }
 
     public static RendezVousDAO getRendezVousDAO() {
         try {
-            if (connection == null || connection.isClosed()) {
-                connection = DatabaseConnection.getConnection();
-            }
+            checkConnection();
             return new RendezVousDAO();
         } catch (SQLException e) {
-            throw new RuntimeException("Erreur lors de la création du DAO RendezVous", e);
+            throw new DaoCreationException(ERREUR_CREATION_DAO+ " [rendezVousDAO]", e);
         }
     }
 }

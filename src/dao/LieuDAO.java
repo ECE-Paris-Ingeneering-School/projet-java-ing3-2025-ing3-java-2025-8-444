@@ -1,11 +1,17 @@
 package dao;
 
+import exceptions.DaoOperationException;
 import model.Lieu;
-import java.sql.*;
-import java.util.*;
 import util.DatabaseConnection;
 
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static util.exceptionsConstantes.ERREUR_DAO_LIEU;
+
 public class LieuDAO implements DAO<Lieu> {
+
     @Override
     public Lieu get(int id) {
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -21,7 +27,9 @@ public class LieuDAO implements DAO<Lieu> {
                         rs.getString("code_postal")
                 );
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_LIEU, e);
+        }
         return null;
     }
 
@@ -40,7 +48,9 @@ public class LieuDAO implements DAO<Lieu> {
                         rs.getString("code_postal")
                 ));
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_LIEU, e);
+        }
         return list;
     }
 
@@ -53,8 +63,9 @@ public class LieuDAO implements DAO<Lieu> {
             stmt.setString(3, l.getVille());
             stmt.setString(4, l.getCodePostal());
             return stmt.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); }
-        return false;
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_LIEU, e);
+        }
     }
 
     @Override
@@ -67,8 +78,9 @@ public class LieuDAO implements DAO<Lieu> {
             stmt.setString(4, l.getCodePostal());
             stmt.setInt(5, l.getId());
             return stmt.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); }
-        return false;
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_LIEU, e);
+        }
     }
 
     @Override
@@ -77,7 +89,8 @@ public class LieuDAO implements DAO<Lieu> {
             PreparedStatement stmt = conn.prepareStatement("DELETE FROM lieu WHERE id=?");
             stmt.setInt(1, l.getId());
             return stmt.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); }
-        return false;
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_LIEU, e);
+        }
     }
 }
