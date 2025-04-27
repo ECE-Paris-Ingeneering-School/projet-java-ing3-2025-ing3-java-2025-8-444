@@ -1,12 +1,14 @@
 package view;
 
+import controller.Mail;
 import dao.RendezVousDAO;
+import exceptions.DaoOperationException;
 import model.RendezVous;
 import model.Utilisateur;
-import controller.Mail;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AccueilPatientView extends JFrame {
@@ -86,8 +88,12 @@ public class AccueilPatientView extends JFrame {
         DefaultListModel<String> modelFuturs = new DefaultListModel<>();
         DefaultListModel<String> modelPasses = new DefaultListModel<>();
 
-        RendezVousDAO rdvDAO = new RendezVousDAO();
-        List<RendezVous> liste = rdvDAO.getAllForPatient(user.getId());
+        List<RendezVous> liste = new ArrayList<>();
+        try {
+            liste = new RendezVousDAO().getAllForPatient(user.getId());
+        } catch (DaoOperationException e) {
+            JOptionPane.showMessageDialog(this, "Erreur lors du chargement des rendez-vous : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
 
         for (RendezVous r : liste) {
             String info = r.getDisponibilite().getDate() + " à " + r.getDisponibilite().getHeureDebut() +
@@ -111,10 +117,11 @@ public class AccueilPatientView extends JFrame {
         annulerButton.setFocusPainted(false);
         annulerButton.setFont(new Font("SansSerif", Font.BOLD, 14));
 
+        List<RendezVous> finalListe = liste;
         annulerButton.addActionListener(e -> {
             int selectedIndex = rdvListFuturs.getSelectedIndex();
-            if (selectedIndex != -1) {
-                RendezVous rdv = liste.get(selectedIndex);
+            if (selectedIndex != -1 && selectedIndex < finalListe.size()) {
+                RendezVous rdv = finalListe.get(selectedIndex);
                 int confirm = JOptionPane.showConfirmDialog(
                         this,
                         "Souhaitez-vous vraiment annuler ce rendez-vous ?",
@@ -122,34 +129,38 @@ public class AccueilPatientView extends JFrame {
                         JOptionPane.YES_NO_OPTION
                 );
                 if (confirm == JOptionPane.YES_OPTION) {
-                    boolean success = new RendezVousDAO().annuler(rdv);
-                    if (success) {
-                        Mail mail = new Mail();
+                    try {
+                        boolean success = new RendezVousDAO().annuler(rdv);
+                        if (success) {
+                            Mail mail = new Mail();
 
-                        String sujetSpecialiste = "Annulation de rendez-vous";
-                        String messageSpecialiste = "Bonjour " + rdv.getSpecialiste().getPrenom() + ",\n\n" +
-                                "Le patient " + user.getPrenom() + " " + user.getNom() +
-                                " a annulé son rendez-vous prévu le " +
-                                rdv.getDisponibilite().getDate() + " à " +
-                                rdv.getDisponibilite().getHeureDebut() + ".\n\n" +
-                                "Merci de votre compréhension.\n\nDoc'n'Roll.";
+                            String sujetSpecialiste = "Annulation de rendez-vous";
+                            String messageSpecialiste = "Bonjour " + rdv.getSpecialiste().getPrenom() + ",\n\n" +
+                                    "Le patient " + user.getPrenom() + " " + user.getNom() +
+                                    " a annulé son rendez-vous prévu le " +
+                                    rdv.getDisponibilite().getDate() + " à " +
+                                    rdv.getDisponibilite().getHeureDebut() + ".\n\n" +
+                                    "Merci de votre compréhension.\n\nDoc'n'Roll.";
 
-                        mail.envoimail(rdv.getSpecialiste(), sujetSpecialiste + "\n" + messageSpecialiste);
+                            mail.envoimail(rdv.getSpecialiste(), sujetSpecialiste + "\n" + messageSpecialiste);
 
-                        String sujetPatient = "Confirmation d'annulation de rendez-vous";
-                        String messagePatient = "Bonjour " + user.getPrenom() + ",\n\n" +
-                                "Votre rendez-vous avec " + rdv.getSpecialiste().getPrenom() + " " + rdv.getSpecialiste().getNom() +
-                                " prévu le " + rdv.getDisponibilite().getDate() + " à " +
-                                rdv.getDisponibilite().getHeureDebut() + " a bien été annulé.\n\n" +
-                                "À bientôt sur Doc'n'Roll !";
+                            String sujetPatient = "Confirmation d'annulation de rendez-vous";
+                            String messagePatient = "Bonjour " + user.getPrenom() + ",\n\n" +
+                                    "Votre rendez-vous avec " + rdv.getSpecialiste().getPrenom() + " " + rdv.getSpecialiste().getNom() +
+                                    " prévu le " + rdv.getDisponibilite().getDate() + " à " +
+                                    rdv.getDisponibilite().getHeureDebut() + " a bien été annulé.\n\n" +
+                                    "À bientôt sur Doc'n'Roll !";
 
-                        mail.envoimail(user, sujetPatient + "\n" + messagePatient);
+                            mail.envoimail(user, sujetPatient + "\n" + messagePatient);
 
-                        JOptionPane.showMessageDialog(this, "Rendez-vous annulé avec succès.");
-                        dispose();
-                        new AccueilPatientView(user);
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Erreur lors de l'annulation.");
+                            JOptionPane.showMessageDialog(this, "Rendez-vous annulé avec succès.");
+                            dispose();
+                            new AccueilPatientView(user);
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Erreur lors de l'annulation.");
+                        }
+                    } catch (DaoOperationException ex) {
+                        JOptionPane.showMessageDialog(this, "Erreur lors de l'annulation : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             } else {

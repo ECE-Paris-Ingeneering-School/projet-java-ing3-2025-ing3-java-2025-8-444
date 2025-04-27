@@ -99,16 +99,21 @@ public class ResultatsRechercheView extends JFrame {
 
     private void reserverDispo(Disponibilite dispo) {
         if (user instanceof Patient) {
-            boolean success = controller.reserverDispo(user, dispo);
-            if (success) {
-                JOptionPane.showMessageDialog(this, "Rendez-vous réservé avec succès !");
-                dispose();
-                new AccueilPatientView(user);
-            } else {
-                JOptionPane.showMessageDialog(this, "Échec de la réservation.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            try {
+                boolean success = controller.reserverDispo(user, dispo);
+                if (success) {
+                    JOptionPane.showMessageDialog(this, "Rendez-vous réservé avec succès !");
+                    dispose();
+                    new AccueilPatientView(user);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Échec de la réservation.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erreur lors de la réservation : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         } else {
             JOptionPane.showMessageDialog(this, "Vous devez être connecté en tant que patient pour réserver un rendez-vous.", "Accès refusé", JOptionPane.WARNING_MESSAGE);
         }
     }
+
 }
