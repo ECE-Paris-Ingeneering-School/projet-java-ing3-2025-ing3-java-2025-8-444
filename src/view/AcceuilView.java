@@ -120,7 +120,9 @@ public class AcceuilView extends JFrame {
             JOptionPane.showMessageDialog(this, "Entrez un critère de recherche.");
             return;
         }
-        controller.afficherResultats(texte);
+        controller.afficherResultats(texte, utilisateur);
+        dispose();
+
     }
 
     private JPanel createFooterPanel() {

@@ -62,12 +62,12 @@ public class PriseRdvController {
                 .collect(Collectors.toList());
     }
 
-    public void afficherResultats(String critere) {
+    public void afficherResultats(String critere, Utilisateur user) {
         List<Disponibilite> resultats = rechercherDisponibilites(critere);
         if (resultats.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Aucun créneau trouvé pour : " + critere);
         } else {
-            new ResultatsRechercheView(resultats);
+            new ResultatsRechercheView(resultats, user);
         }
     }
 }
