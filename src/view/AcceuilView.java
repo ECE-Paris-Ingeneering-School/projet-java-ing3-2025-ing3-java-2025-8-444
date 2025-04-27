@@ -1,6 +1,8 @@
 package view;
 
 import controller.PriseRdvController;
+import exceptions.DaoOperationException;
+import exceptions.UtilisateurNonTrouveException;
 import model.Utilisateur;
 
 import javax.swing.*;
@@ -47,17 +49,25 @@ public class AcceuilView extends JFrame {
         JButton topButton = new JButton(utilisateur == null ? "Connexion" : "Mon compte");
         topButton.addActionListener(e -> {
             dispose();
-            if (utilisateur == null) {
-                new ConnexionView();
-            } else {
-                if (utilisateur instanceof model.Patient) {
-                    new AccueilPatientView(utilisateur);
-                } else if (utilisateur instanceof model.Admin) {
-                    new AccueilAdminView(utilisateur);
+            try {
+                if (utilisateur == null) {
+                    new ConnexionView();
                 } else {
-                    new AccueilSpecialisteView(utilisateur);
+                    if (utilisateur instanceof model.Patient) {
+                        new AccueilPatientView(utilisateur);
+                    } else if (utilisateur instanceof model.Admin) {
+                        new AccueilAdminView(utilisateur);
+                    } else {
+                        new AccueilSpecialisteView(utilisateur);
+                    }
                 }
+                dispose(); // Après avoir réussi l'ouverture
+            } catch (UtilisateurNonTrouveException ex) {
+                JOptionPane.showMessageDialog(this, "Utilisateur non trouvé.");
+            } catch (DaoOperationException ex) {
+                JOptionPane.showMessageDialog(this, "Erreur d'accès aux informations utilisateur.");
             }
+
         });
         header.add(topButton, BorderLayout.EAST);
 
@@ -120,10 +130,15 @@ public class AcceuilView extends JFrame {
             JOptionPane.showMessageDialog(this, "Entrez un critère de recherche.");
             return;
         }
-        controller.afficherResultats(texte, utilisateur);
+        try {
+            controller.afficherResultats(texte, utilisateur);
+        } catch (RuntimeException e) {
+            JOptionPane.showMessageDialog(this, "Une erreur est survenue lors de la recherche : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+            System.err.println("Erreur lors de la recherche : " + e.getMessage());
+        }
         dispose();
-
     }
+
 
     private JPanel createFooterPanel() {
         JPanel footer = new JPanel(new GridLayout(1, 3));

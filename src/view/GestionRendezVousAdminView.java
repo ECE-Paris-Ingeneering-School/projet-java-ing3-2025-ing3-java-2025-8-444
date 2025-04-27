@@ -1,11 +1,14 @@
 package view;
 
 import dao.RendezVousDAO;
+import exceptions.DaoOperationException;
 import model.RendezVous;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+
+import static util.exceptionsConstantes.*;
 
 public class GestionRendezVousAdminView extends JFrame {
 
@@ -32,9 +35,13 @@ public class GestionRendezVousAdminView extends JFrame {
 
     private void chargerRendezVous() {
         rdvModel.clear();
-        List<RendezVous> all = rdvDAO.getAll();
-        for (RendezVous r : all) {
-            rdvModel.addElement(r);
+        try {
+            List<RendezVous> all = rdvDAO.getAll();
+            for (RendezVous r : all) {
+                rdvModel.addElement(r);
+            }
+        } catch (DaoOperationException e) {
+            JOptionPane.showMessageDialog(this, ERREUR_CHARGEMENT_RDV + "\n" + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -67,11 +74,15 @@ public class GestionRendezVousAdminView extends JFrame {
         if (nouveauStatut != null && nouvellesNotes != null) {
             rdv.setStatut(nouveauStatut);
             rdv.setNotes(nouvellesNotes);
-            if (rdvDAO.update(rdv)) {
-                JOptionPane.showMessageDialog(this, "Rendez-vous modifié.");
-                chargerRendezVous();
-            } else {
-                JOptionPane.showMessageDialog(this, "Erreur lors de la mise à jour.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            try {
+                if (rdvDAO.update(rdv)) {
+                    JOptionPane.showMessageDialog(this, "Rendez-vous modifié.");
+                    chargerRendezVous();
+                } else {
+                    JOptionPane.showMessageDialog(this, ERREUR_MISE_A_JOUR_RDV, "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (DaoOperationException e) {
+                JOptionPane.showMessageDialog(this, ERREUR_MISE_A_JOUR_RDV + "\n" + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -82,11 +93,15 @@ public class GestionRendezVousAdminView extends JFrame {
 
         int confirm = JOptionPane.showConfirmDialog(this, "Confirmer la suppression de ce rendez-vous ?", "Confirmation", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
-            if (rdvDAO.delete(rdv)) {
-                JOptionPane.showMessageDialog(this, "Rendez-vous supprimé.");
-                chargerRendezVous();
-            } else {
-                JOptionPane.showMessageDialog(this, "Échec de la suppression.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            try {
+                if (rdvDAO.delete(rdv)) {
+                    JOptionPane.showMessageDialog(this, "Rendez-vous supprimé.");
+                    chargerRendezVous();
+                } else {
+                    JOptionPane.showMessageDialog(this, ERREUR_SUPPRESSION_RDV, "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (DaoOperationException e) {
+                JOptionPane.showMessageDialog(this, ERREUR_SUPPRESSION_RDV + "\n" + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         }
     }

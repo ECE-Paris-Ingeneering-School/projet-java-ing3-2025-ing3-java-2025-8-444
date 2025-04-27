@@ -1,6 +1,7 @@
 package view;
 
 import dao.RendezVousDAO;
+import exceptions.DaoOperationException;
 import model.RendezVous;
 import model.Utilisateur;
 
@@ -86,7 +87,13 @@ public class AccueilPatientView extends JFrame {
         DefaultListModel<String> modelPasses = new DefaultListModel<>();
 
         RendezVousDAO rdvDAO = new RendezVousDAO();
-        List<RendezVous> liste = rdvDAO.getAllForPatient(user.getId());
+        List<RendezVous> liste;
+        try {
+            liste = rdvDAO.getAllForPatient(user.getId());
+        } catch (DaoOperationException e) {
+            JOptionPane.showMessageDialog(this, "Erreur lors du chargement de vos rendez-vous : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+            liste = List.of(); // liste vide si erreur
+        }
 
         for (RendezVous r : liste) {
             String info = r.getDisponibilite().getDate() + " à " + r.getDisponibilite().getHeureDebut() +
@@ -110,10 +117,11 @@ public class AccueilPatientView extends JFrame {
         annulerButton.setFocusPainted(false);
         annulerButton.setFont(new Font("SansSerif", Font.BOLD, 14));
 
+        List<RendezVous> finalListe = liste;
         annulerButton.addActionListener(e -> {
             int selectedIndex = rdvListFuturs.getSelectedIndex();
             if (selectedIndex != -1) {
-                RendezVous rdv = liste.get(selectedIndex);
+                RendezVous rdv = finalListe.get(selectedIndex);
                 int confirm = JOptionPane.showConfirmDialog(
                         this,
                         "Souhaitez-vous vraiment annuler ce rendez-vous ?",
@@ -121,13 +129,17 @@ public class AccueilPatientView extends JFrame {
                         JOptionPane.YES_NO_OPTION
                 );
                 if (confirm == JOptionPane.YES_OPTION) {
-                    boolean success = new RendezVousDAO().annuler(rdv);
-                    if (success) {
-                        JOptionPane.showMessageDialog(this, "Rendez-vous annulé avec succès.");
-                        dispose();
-                        new AccueilPatientView(user);
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Erreur lors de l'annulation.");
+                    try {
+                        boolean success = new RendezVousDAO().annuler(rdv);
+                        if (success) {
+                            JOptionPane.showMessageDialog(this, "Rendez-vous annulé avec succès.");
+                            dispose();
+                            new AccueilPatientView(user);
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Erreur lors de l'annulation du rendez-vous.");
+                        }
+                    } catch (DaoOperationException ex) {
+                        JOptionPane.showMessageDialog(this, "Erreur technique lors de l'annulation : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             } else {
@@ -166,5 +178,4 @@ public class AccueilPatientView extends JFrame {
         wrapper.add(content);
         return wrapper;
     }
-
 }
