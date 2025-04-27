@@ -191,6 +191,12 @@ public class RendezVousDAO implements DAO<RendezVous> {
         }
     }
 
+    /**
+     * Met à jour le statut d'un rendez-vous dans la base de données.
+     *
+     * @param rdv Le rendez-vous dont le statut doit être mis à jour.
+     * @return true si la mise à jour a réussi, false sinon.
+     */
     public boolean updateStatut(RendezVous rdv) {
         try (Connection conn = DatabaseConnection.getConnection()) {
             String sql = "UPDATE RendezVous SET statut = ? WHERE id = ?";
@@ -204,6 +210,11 @@ public class RendezVousDAO implements DAO<RendezVous> {
         }
     }
 
+    /**
+     * Compte le nombre total de rendez-vous enregistrés dans la base de données.
+     *
+     * @return Le nombre total de rendez-vous.
+     */
     public int countRendezVous() {
         int count = 0;
 

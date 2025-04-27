@@ -10,12 +10,18 @@ import java.util.List;
 
 import static util.exceptionsConstantes.*;
 
+/**
+ * Page admin de la gestion des rendez vous
+ */
 public class GestionRendezVousAdminView extends JFrame {
 
     private final DefaultListModel<RendezVous> rdvModel;
     private final JList<RendezVous> rdvList;
     private final RendezVousDAO rdvDAO;
 
+    /**
+     * Liste des rendez vous de la plateforme et panel de boutons pour les gérer
+     */
     public GestionRendezVousAdminView() {
         rdvDAO = new RendezVousDAO();
         rdvModel = new DefaultListModel<>();
@@ -33,6 +39,9 @@ public class GestionRendezVousAdminView extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Programme pour charger les rendez vous, fait appel à rdvDAO et récupère toute la table de rendez vous
+     */
     private void chargerRendezVous() {
         rdvModel.clear();
         try {
@@ -45,6 +54,13 @@ public class GestionRendezVousAdminView extends JFrame {
         }
     }
 
+    /**
+     * Panel de boutons
+     * Modifier le statut ou la note
+     * Supprimer le rendez vous
+     * Fermer la page
+     * @return panel
+     */
     private JPanel createButtonPanel() {
         JPanel panel = new JPanel();
 
@@ -64,6 +80,11 @@ public class GestionRendezVousAdminView extends JFrame {
         return panel;
     }
 
+    /**
+     * Programme modification rendez vous
+     * Champ pour entrer un commentaire sur le rendez vous
+     * Champ pour modifier le statut du rendez vous
+     */
     private void modifierRdv() {
         RendezVous rdv = rdvList.getSelectedValue();
         if (rdv == null) return;
@@ -87,6 +108,9 @@ public class GestionRendezVousAdminView extends JFrame {
         }
     }
 
+    /**
+     * Programme supprimer rendez vous
+     */
     private void supprimerRdv() {
         RendezVous rdv = rdvList.getSelectedValue();
         if (rdv == null) return;

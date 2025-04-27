@@ -14,6 +14,9 @@ import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
+/**
+ * Page pour que le spécialiste ajoute une disponibilité.
+ */
 public class AjoutDisponibiliteView extends JFrame {
     private Specialiste specialiste;
     private DisponibiliteController controller;
@@ -23,6 +26,10 @@ public class AjoutDisponibiliteView extends JFrame {
     private JTextField debutField;
     private JTextField finField;
 
+    /**
+     * Page composée de champs à remplir et d'un bouton de confirmation
+     * @param specialiste
+     */
     public AjoutDisponibiliteView(Specialiste specialiste) {
         this.specialiste = specialiste;
         this.controller = new DisponibiliteController();
@@ -39,6 +46,11 @@ public class AjoutDisponibiliteView extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Form pour ajouter les informations de la dispo du spécialiste
+     * Date, heure de début, heure de fin, et lieu
+     * @return form
+     */
     private JPanel createFormPanel() {
         JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -67,6 +79,10 @@ public class AjoutDisponibiliteView extends JFrame {
         return panel;
     }
 
+    /**
+     * Bouton de confirmation des informations remplies dans le form
+     * @return bouton
+     */
     private JPanel createButtonPanel() {
         JPanel panel = new JPanel();
         JButton ajouterBtn = new JButton("Ajouter");
@@ -75,6 +91,10 @@ public class AjoutDisponibiliteView extends JFrame {
         return panel;
     }
 
+    /**
+     * Programme pour ajouter une disponibilité, prend les infos renseignées dans le forme et les envoie
+     * au controller DisponibiliteController
+     */
     private void ajouterDisponibilite() {
         try {
             LocalDate date = LocalDate.parse(dateField.getText().trim());

@@ -12,6 +12,10 @@ import java.util.List;
 
 import static util.exceptionsConstantes.*;
 
+/**
+ * Page de prise de rendez vous, accessible après avoir cliqué sur le bouton "ajouter un rendez vous"
+ * sur la page d'accueil patient
+ */
 public class RechercheEtPriseRDVView extends JFrame {
     private Utilisateur user;
     private JComboBox<String> specialiteCombo;
@@ -20,6 +24,10 @@ public class RechercheEtPriseRDVView extends JFrame {
     private List<Disponibilite> disponibilites;
     private PriseRdvController controller;
 
+    /**
+     * Composée d'un header et un main panel
+     * @param user
+     */
     public RechercheEtPriseRDVView(Utilisateur user) {
         this.user = user;
         this.controller = new PriseRdvController();
@@ -37,6 +45,11 @@ public class RechercheEtPriseRDVView extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Header, bleu,
+     * Logo à gauche, description de la page au milieu, bouton accueil patient et déconnexion à droite
+     * @return
+     */
     private JPanel createHeaderPanel() {
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(new Color(52, 152, 219));
@@ -78,6 +91,12 @@ public class RechercheEtPriseRDVView extends JFrame {
         return header;
     }
 
+    /**
+     * Main panel, blanc
+     * Menu déroulant des différentes spécialités, et liste des rendez vous disponibles pour ces spécialités
+     * Bouton pour prendre le rendez vous
+     * @return main
+     */
     private JPanel createMainPanel() {
         JPanel wrapper = new JPanel(new GridBagLayout());
         wrapper.setBackground(new Color(245, 245, 245));
@@ -115,6 +134,10 @@ public class RechercheEtPriseRDVView extends JFrame {
         return wrapper;
     }
 
+    /**
+     * Programme pour charger les disponibilités
+     * fait appel au controller DisponibiliteController pour renvoyer les informations des rendez vous
+     */
     private void chargerDisponibilites() {
         try {
             String specialite = (String) specialiteCombo.getSelectedItem();
@@ -131,6 +154,9 @@ public class RechercheEtPriseRDVView extends JFrame {
         }
     }
 
+    /**
+     * Programme de confirmation de la reservation, activé par le bouton de réservation
+     */
     private void reserverSelection() {
         int index = dispoList.getSelectedIndex();
         if (index >= 0) {

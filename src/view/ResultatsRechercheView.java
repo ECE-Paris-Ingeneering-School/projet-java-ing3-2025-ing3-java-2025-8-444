@@ -10,11 +10,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * Page de résultat, affichée après avoir effectué une recherche dans la barre de recherche de la
+ * page d'accueil
+ */
 public class ResultatsRechercheView extends JFrame {
 
     private Utilisateur user;
     private PriseRdvController controller = new PriseRdvController();
 
+    /**
+     * Composée d'un Header et d'un main panel (resultats)
+     * @param resultats
+     * @param user
+     */
     public ResultatsRechercheView(List<Disponibilite> resultats, Utilisateur user) {
         this.user = user;
 
@@ -31,6 +40,11 @@ public class ResultatsRechercheView extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Header, bleu
+     * Message au milieu, bouton retour à droite
+     * @return header
+     */
     private JPanel createHeaderPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -52,6 +66,13 @@ public class ResultatsRechercheView extends JFrame {
         return panel;
     }
 
+    /**
+     * Main panel, blanc
+     * Liste des disponibilités contenants l'information recherchée dans la barre de recherche
+     * Chaque disponibilité a un bouton pour reserver cette disponibilité
+     * @param resultats
+     * @return main
+     */
     private JScrollPane createResultPanel(List<Disponibilite> resultats) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -97,6 +118,11 @@ public class ResultatsRechercheView extends JFrame {
         return new JScrollPane(panel);
     }
 
+    /**
+     * Programme de reservation de la disponibilité sélectionnée
+     * fait appel au controller disponibiliteController
+     * @param dispo
+     */
     private void reserverDispo(Disponibilite dispo) {
         if (user instanceof Patient) {
             try {

@@ -10,11 +10,17 @@ import java.awt.event.ActionEvent;
 
 import static util.exceptionsConstantes.IDENTIFIANTS_INCORRECTS;
 
+/**
+ * Page de connexion
+ */
 public class ConnexionView extends JFrame {
     private JTextField emailField;
     private JPasswordField passwordField;
     private ConnexionController controller;
 
+    /**
+     * Page de connexion composée d'un header et d'un main
+     */
     public ConnexionView() {
         controller = new ConnexionController();
         setTitle("Connexion - Doc'n'Roll");
@@ -29,6 +35,10 @@ public class ConnexionView extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Header, bleu, logo à gauche et bouton retour à droite
+     * @return header
+     */
     private JPanel createHeaderPanel() {
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(new Color(52, 152, 219));
@@ -50,6 +60,13 @@ public class ConnexionView extends JFrame {
         return header;
     }
 
+    /**
+     * Main, blanc
+     * Un champ email et un champ mot de passe à remplir
+     * Bouton de confirmation
+     * Bouton pour création d'un compte
+     * @return main
+     */
     private JPanel createMainPanel() {
         JPanel panel = new JPanel();
         panel.setBackground(new Color(245, 245, 245)); // gris très clair
@@ -109,7 +126,10 @@ public class ConnexionView extends JFrame {
         panel.add(formWrapper);
         return panel;
     }
-
+    /**
+     * Programme qui assure la connexion
+     * Appelle le controller ConnexionController et utilise sa fonction seConnecter
+     */
     private void handleLogin(ActionEvent e) {
         String email = emailField.getText();
         String mdp = new String(passwordField.getPassword());

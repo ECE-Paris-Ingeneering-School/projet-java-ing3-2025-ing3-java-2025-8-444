@@ -12,6 +12,9 @@ import java.awt.event.ActionEvent;
 
 import static util.exceptionsConstantes.*;
 
+/**
+ * Page d'inscription en tant que patient accessible depuis la page de connexion
+ */
 public class InscriptionView extends JFrame {
     private JTextField nomField;
     private JTextField prenomField;
@@ -20,6 +23,9 @@ public class InscriptionView extends JFrame {
     private PatientController controller;
     private Mail mail;
 
+    /**
+     * Composée d'un header et un main panel
+     */
     public InscriptionView() {
         controller = new PatientController();
         setTitle("Inscription - Doc'n'Roll");
@@ -37,6 +43,11 @@ public class InscriptionView extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Header, bleu,
+     * Logo à gauche et bouton retour à la page de connexion à droite
+     * @return header
+     */
     private JPanel createHeaderPanel() {
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(new Color(52, 152, 219));
@@ -58,6 +69,13 @@ public class InscriptionView extends JFrame {
         return header;
     }
 
+    /**
+     * Main panel, blanc
+     * Form à remplir avec
+     * Nom, Prenom, Email et mot de passe
+     * Bouton de confirmation
+     * @return main
+     */
     private JPanel createMainPanel() {
         JPanel wrapper = new JPanel(new GridBagLayout());
         wrapper.setBackground(new Color(245, 245, 245));
@@ -117,6 +135,11 @@ public class InscriptionView extends JFrame {
         return wrapper;
     }
 
+    /**
+     * Programme d'inscription
+     * fait appel à la fonction inscrirePatient dans le controller PatientController
+     * @param e
+     */
     private void handleRegister(ActionEvent e) {
         String nom = nomField.getText().trim();
         String prenom = prenomField.getText().trim();

@@ -195,6 +195,12 @@ public class SpecialisteDAO implements DAO<Specialiste> {
         return count;
     }
 
+    /**
+     * Récupère le nombre de spécialistes pour chaque spécialité.
+     *
+     * @return Une map associant le nom de chaque spécialité au nombre de spécialistes correspondants.
+     * @throws DaoOperationException en cas d'erreur lors de l'accès à la base de données.
+     */
     public Map<String, Integer> countSpecialistesBySpecialite() {
         Map<String, Integer> result = new HashMap<>();
 
