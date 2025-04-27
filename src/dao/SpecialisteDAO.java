@@ -1,13 +1,18 @@
 package dao;
 
+import exceptions.DaoOperationException;
 import model.Specialiste;
 import model.Specialite;
 import util.DatabaseConnection;
 
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static util.exceptionsConstantes.ERREUR_DAO_SPECIALISTE;
 
 public class SpecialisteDAO implements DAO<Specialiste> {
+
     @Override
     public Specialiste get(int id) {
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -32,7 +37,9 @@ public class SpecialisteDAO implements DAO<Specialiste> {
                         specialite
                 );
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_SPECIALISTE, e);
+        }
         return null;
     }
 
@@ -59,7 +66,9 @@ public class SpecialisteDAO implements DAO<Specialiste> {
                         specialite
                 ));
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_SPECIALISTE, e);
+        }
         return list;
     }
 
@@ -92,7 +101,9 @@ public class SpecialisteDAO implements DAO<Specialiste> {
                 return true;
             }
             conn.rollback();
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_SPECIALISTE, e);
+        }
         return false;
     }
 
@@ -110,8 +121,9 @@ public class SpecialisteDAO implements DAO<Specialiste> {
             stmt.setString(6, s.getSpecialite().getNom());
             stmt.setInt(7, s.getId());
             return stmt.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); }
-        return false;
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_SPECIALISTE, e);
+        }
     }
 
     @Override
@@ -121,7 +133,8 @@ public class SpecialisteDAO implements DAO<Specialiste> {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, s.getId());
             return stmt.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); }
-        return false;
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_SPECIALISTE, e);
+        }
     }
 }

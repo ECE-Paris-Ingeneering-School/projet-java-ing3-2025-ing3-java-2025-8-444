@@ -1,4 +1,7 @@
 package exceptions;
 
-public class PatientSaveException {
+public class PatientSaveException extends RuntimeException {
+    public PatientSaveException(String message) {
+        super(message);
+    }
 }

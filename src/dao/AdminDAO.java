@@ -1,10 +1,14 @@
 package dao;
 
+import exceptions.DaoOperationException;
 import model.Admin;
 import util.DatabaseConnection;
 
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static util.exceptionsConstantes.ERREUR_DAO_ADMIN;
 
 public class AdminDAO implements DAO<Admin> {
     @Override
@@ -24,8 +28,10 @@ public class AdminDAO implements DAO<Admin> {
                         rs.getString("mot_de_passe")
                 );
             }
-        } catch (SQLException e) { e.printStackTrace(); }
-        return null;
+            return null;
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_ADMIN, e);
+        }
     }
 
     @Override
@@ -45,8 +51,10 @@ public class AdminDAO implements DAO<Admin> {
                         rs.getString("mot_de_passe")
                 ));
             }
-        } catch (SQLException e) { e.printStackTrace(); }
-        return admins;
+            return admins;
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_ADMIN, e);
+        }
     }
 
     @Override
@@ -74,11 +82,13 @@ public class AdminDAO implements DAO<Admin> {
 
                 conn.commit();
                 return true;
+            } else {
+                conn.rollback();
+                return false;
             }
-
-            conn.rollback();
-        } catch (SQLException e) { e.printStackTrace(); }
-        return false;
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_ADMIN, e);
+        }
     }
 
     @Override
@@ -92,8 +102,9 @@ public class AdminDAO implements DAO<Admin> {
             stmt.setString(4, admin.getMotDePasse());
             stmt.setInt(5, admin.getId());
             return stmt.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); }
-        return false;
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_ADMIN, e);
+        }
     }
 
     @Override
@@ -103,7 +114,8 @@ public class AdminDAO implements DAO<Admin> {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, admin.getId());
             return stmt.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); }
-        return false;
+        } catch (SQLException e) {
+            throw new DaoOperationException(ERREUR_DAO_ADMIN, e);
+        }
     }
 }

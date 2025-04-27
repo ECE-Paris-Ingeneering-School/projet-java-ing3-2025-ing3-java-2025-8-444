@@ -1,8 +1,10 @@
 package dao;
 
 import model.Utilisateur;
-import java.sql.*;
-import java.util.*;
+
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UtilisateurDAO implements DAO<Utilisateur> {
     protected Connection connection;

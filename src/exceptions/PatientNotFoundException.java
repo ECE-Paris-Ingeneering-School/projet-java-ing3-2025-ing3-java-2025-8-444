@@ -1,4 +1,7 @@
 package exceptions;
 
-public class PatientNotFoundException {
+public class PatientNotFoundException extends RuntimeException {
+    public PatientNotFoundException(String message) {
+        super(message);
+    }
 }
